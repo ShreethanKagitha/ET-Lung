@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+
+{% block title %}About - Lung Cancer Prediction System{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header">
+    <div class="container">
+        <h1><i class="fas fa-info-circle"></i> About LungCare AI</h1>
+        <p>Advanced AI technology for lung cancer detection and prevention</p>
+    </div>
+</section>
+
+<!-- About Content -->
+<section class="about-section">
+    <div class="container">
+        <div class="about-grid">
+            <div class="about-content">
+                <h2>Our Mission</h2>
+                <p>
+                    LungCare AI is dedicated to revolutionizing lung cancer detection through 
+                    advanced artificial intelligence and machine learning technologies. Our mission 
+                    is to provide accessible, accurate, and early detection tools that can help 
+                    save lives by identifying lung cancer risks before symptoms appear.
+                </p>
+                <p>
+                    By leveraging state-of-the-art machine learning algorithms trained on extensive 
+                    medical datasets, we aim to assist healthcare professionals and individuals in 
+                    making informed decisions about lung health.
+                </p>
+            </div>
+
+            <div class="about-image">
+                <div class="stats-box">
+                    <div class="stat">
+                        <h3>74.4%</h3>
+                        <p>Best Model Accuracy</p>
+                    </div>
+                    <div class="stat">
+                        <h3>8</h3>
+                        <p>ML Algorithms</p>
+                    </div>
+                    <div class="stat">
+                        <h3>99.9%</h3>
+                        <p>Uptime</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Technology Section -->
+<section class="technology-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Our Technology</h2>
+            <p>Advanced machine learning models powering our predictions</p>
+        </div>
+
+        <div class="tech-grid">
+            <div class="tech-card">
+                <div class="tech-icon">
+                    <i class="fas fa-project-diagram"></i>
+                </div>
+                <h3>Gradient Boosting</h3>
+                <p>Our best performing model with 74.4% accuracy, utilizing ensemble learning techniques.</p>
+            </div>
+
+            <div class="tech-card">
+                <div class="tech-icon">
+                    <i class="fas fa-network-wired"></i>
+                </div>
+                <h3>XGBoost</h3>
+                <p>Extreme Gradient Boosting for high-performance predictions with regularization.</p>
+            </div>
+
+            <div class="tech-card">
+                <div class="tech-icon">
+                    <i class="fas fa-tree"></i>
+                </div>
+                <h3>Random Forest</h3>
+                <p>Ensemble of decision trees providing robust and reliable predictions.</p>
+            </div>
+
+            <div class="tech-card">
+                <div class="tech-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h3>Neural Networks</h3>
+                <p>Deep learning approaches for complex pattern recognition in medical data.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="about-features">
+    <div class="container">
+        <h2 class="text-center">Key Features</h2>
+
+        <div class="features-list">
+            <div class="feature-item">
+                <div class="feature-icon-circle">
+                    <i class="fas fa-database"></i>
+                </div>
+                <div class="feature-details">
+                    <h3>Comprehensive Data Analysis</h3>
+                    <p>Analyzes 9+ clinical parameters including age, smoking history, environmental exposure, and family history.</p>
+                </div>
+            </div>
+
+            <div class="feature-item">
+                <div class="feature-icon-circle">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="feature-details">
+                    <h3>Model Comparison</h3>
+                    <p>Utilizes 8 different machine learning algorithms to ensure the most accurate predictions.</p>
+                </div>
+            </div>
+
+            <div class="feature-item">
+                <div class="feature-icon-circle">
+                    <i class="fas fa-eye"></i>
+                </div>
+                <div class="feature-details">
+                    <h3>Visual Results</h3>
+                    <p>Easy-to-understand graphical representation of risk assessment and probability scores.</p>
+                </div>
+            </div>
+
+            <div class="feature-item">
+                <div class="feature-icon-circle">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <div class="feature-details">
+                    <h3>Data Privacy</h3>
+                    <p>All data is processed securely with encryption and is never stored permanently.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Team Section -->
+<section class="disclaimer-section">
+    <div class="container">
+        <div class="disclaimer-box">
+            <div class="disclaimer-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <h3>Medical Disclaimer</h3>
+            <p>
+                This AI-powered prediction system is designed as a screening and awareness tool. 
+                It should NOT be used as a substitute for professional medical diagnosis, advice, 
+                or treatment. Always consult with qualified healthcare professionals for proper 
+                medical evaluation and diagnosis.
+            </p>
+            <p>
+                The predictions provided by this system are based on statistical models and should 
+                be interpreted as risk indicators rather than definitive diagnoses.
+            </p>
+        </div>
+    </div>
+</section>
+{% endblock %}

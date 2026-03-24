@@ -1,0 +1,305 @@
+{% extends "base.html" %}
+
+{% block title %}Prediction - Lung Cancer Prediction System{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header">
+    <div class="container">
+        <h1><i class="fas fa-stethoscope"></i> Lung Cancer Risk Assessment</h1>
+        <p>Enter patient information for AI-powered prediction</p>
+    </div>
+</section>
+
+<!-- Prediction Form Section -->
+<section class="prediction-section">
+    <div class="container">
+        <div class="prediction-container">
+            <div class="form-container">
+                <div class="form-header">
+                    <h2>Patient Information Form</h2>
+                    <p>All fields are required for accurate prediction</p>
+                </div>
+                
+                <form id="predictionForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="age">
+                                <i class="fas fa-birthday-cake"></i> Age
+                            </label>
+                            <input type="number" id="age" name="age" min="1" max="120" required 
+                                   placeholder="Enter age (years)">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="gender">
+                                <i class="fas fa-venus-mars"></i> Gender
+                            </label>
+                            <select id="gender" name="gender" required>
+                                <option value="">Select Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="pack_years">
+                                <i class="fas fa-smoking"></i> Pack Years
+                            </label>
+                            <input type="number" id="pack_years" name="pack_years" min="0" step="0.01" required 
+                                   placeholder="Cigarette packs per day × years">
+                            <small>Number of cigarette packs smoked per day × years of smoking</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="radon_exposure">
+                                <i class="fas fa-radiation"></i> Radon Exposure
+                            </label>
+                            <select id="radon_exposure" name="radon_exposure" required>
+                                <option value="">Select Level</option>
+                                <option value="Low">Low</option>
+                                <option value="Medium">Medium</option>
+                                <option value="High">High</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="asbestos_exposure">
+                                <i class="fas fa-hard-hat"></i> Asbestos Exposure
+                            </label>
+                            <select id="asbestos_exposure" name="asbestos_exposure" required>
+                                <option value="">Select Option</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="secondhand_smoke_exposure">
+                                <i class="fas fa-smog"></i> Secondhand Smoke Exposure
+                            </label>
+                            <select id="secondhand_smoke_exposure" name="secondhand_smoke_exposure" required>
+                                <option value="">Select Option</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="copd_diagnosis">
+                                <i class="fas fa-lungs"></i> COPD Diagnosis
+                            </label>
+                            <select id="copd_diagnosis" name="copd_diagnosis" required>
+                                <option value="">Select Option</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="alcohol_consumption">
+                                <i class="fas fa-wine-glass-alt"></i> Alcohol Consumption
+                            </label>
+                            <select id="alcohol_consumption" name="alcohol_consumption" required>
+                                <option value="">Select Level</option>
+                                <option value="None">None</option>
+                                <option value="Moderate">Moderate</option>
+                                <option value="Heavy">Heavy</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="family_history">
+                            <i class="fas fa-users"></i> Family History of Lung Cancer
+                        </label>
+                        <select id="family_history" name="family_history" required>
+                            <option value="">Select Option</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-predict" id="predictBtn">
+                            <i class="fas fa-chart-line"></i> Get Prediction
+                        </button>
+                        <button type="reset" class="btn btn-reset">
+                            <i class="fas fa-redo"></i> Reset Form
+                        </button>
+                    </div>
+                </form>
+                
+                <!-- Loading Spinner -->
+                <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+                    <div class="spinner"></div>
+                    <p>Analyzing data with AI models...</p>
+                </div>
+            </div>
+            
+            <!-- Result Container -->
+            <div class="result-container" id="resultContainer" style="display: none;">
+                <div class="result-header">
+                    <h2>Prediction Results</h2>
+                    <button class="btn-close" id="closeResult">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="result-content">
+                    <div class="result-status" id="resultStatus">
+                        <div class="status-icon" id="statusIcon"></div>
+                        <h3 id="predictionText"></h3>
+                        <div class="risk-badge" id="riskBadge"></div>
+                    </div>
+                    
+                    <div class="result-probability">
+                        <div class="prob-item">
+                            <span class="prob-label">No Cancer</span>
+                            <div class="prob-bar">
+                                <div class="prob-fill no-cancer" id="noCancerBar"></div>
+                            </div>
+                            <span class="prob-value" id="noCancerProb"></span>
+                        </div>
+                        
+                        <div class="prob-item">
+                            <span class="prob-label">Has Cancer</span>
+                            <div class="prob-bar">
+                                <div class="prob-fill has-cancer" id="hasCancerBar"></div>
+                            </div>
+                            <span class="prob-value" id="hasCancerProb"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="result-chart">
+                        <img id="resultChart" src="" alt="Prediction Chart">
+                    </div>
+                    
+                    <div class="result-info">
+                        <div class="info-box">
+                            <i class="fas fa-info-circle"></i>
+                            <p>This prediction is based on advanced machine learning algorithms. Please consult a healthcare professional for proper medical diagnosis.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="result-actions">
+                        <button class="btn btn-primary" onclick="window.print()">
+                            <i class="fas fa-print"></i> Print Results
+                        </button>
+                        <a href="{{ url_for('contact') }}" class="btn btn-secondary">
+                            <i class="fas fa-envelope"></i> Contact Us
+                        </a>
+                    </div>
+                    
+                    <div class="result-timestamp">
+                        <small id="timestamp"></small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById('predictionForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    // Get form data
+    const formData = {
+        age: document.getElementById('age').value,
+        gender: document.getElementById('gender').value,
+        pack_years: document.getElementById('pack_years').value,
+        radon_exposure: document.getElementById('radon_exposure').value,
+        asbestos_exposure: document.getElementById('asbestos_exposure').value,
+        secondhand_smoke_exposure: document.getElementById('secondhand_smoke_exposure').value,
+        copd_diagnosis: document.getElementById('copd_diagnosis').value,
+        alcohol_consumption: document.getElementById('alcohol_consumption').value,
+        family_history: document.getElementById('family_history').value
+    };
+    
+    // Show loading spinner
+    document.getElementById('loadingSpinner').style.display = 'block';
+    document.getElementById('predictBtn').disabled = true;
+    
+    try {
+        // Send prediction request
+        const response = await fetch('/predict', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        });
+        
+        const result = await response.json();
+        
+        if (result.error) {
+            alert('Error: ' + result.error);
+            return;
+        }
+        
+        // Display results
+        displayResults(result);
+        
+    } catch (error) {
+        alert('An error occurred: ' + error.message);
+    } finally {
+        document.getElementById('loadingSpinner').style.display = 'none';
+        document.getElementById('predictBtn').disabled = false;
+    }
+});
+
+function displayResults(result) {
+    // Show result container
+    document.getElementById('resultContainer').style.display = 'block';
+    document.getElementById('resultContainer').scrollIntoView({ behavior: 'smooth' });
+    
+    // Set prediction text and icon
+    const predictionText = document.getElementById('predictionText');
+    const statusIcon = document.getElementById('statusIcon');
+    const riskBadge = document.getElementById('riskBadge');
+    
+    if (result.prediction === 'Yes') {
+        predictionText.innerHTML = 'Positive Cancer Risk Detected';
+        statusIcon.innerHTML = '<i class="fas fa-exclamation-circle" style="color: #e74c3c;"></i>';
+        predictionText.style.color = '#e74c3c';
+    } else {
+        predictionText.innerHTML = 'No Significant Cancer Risk';
+        statusIcon.innerHTML = '<i class="fas fa-check-circle" style="color: #2ecc71;"></i>';
+        predictionText.style.color = '#2ecc71';
+    }
+    
+    // Set risk badge
+    riskBadge.textContent = result.risk_level;
+    riskBadge.style.backgroundColor = result.risk_color;
+    
+    // Set probability bars
+    document.getElementById('noCancerBar').style.width = result.probability.no_cancer + '%';
+    document.getElementById('noCancerProb').textContent = result.probability.no_cancer + '%';
+    
+    document.getElementById('hasCancerBar').style.width = result.probability.has_cancer + '%';
+    document.getElementById('hasCancerProb').textContent = result.probability.has_cancer + '%';
+    
+    // Set chart
+    if (result.chart_data) {
+        document.getElementById('resultChart').src = 'data:image/png;base64,' + result.chart_data;
+    }
+    
+    // Set timestamp
+    document.getElementById('timestamp').textContent = 'Generated on: ' + result.timestamp;
+}
+
+document.getElementById('closeResult').addEventListener('click', function() {
+    document.getElementById('resultContainer').style.display = 'none';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+{% endblock %}

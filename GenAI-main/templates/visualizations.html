@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics - Lung Cancer Prediction System{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header">
+    <div class="container">
+        <h1><i class="fas fa-chart-bar"></i> Model Analytics & Performance</h1>
+        <p>Comprehensive visualization of machine learning model performance</p>
+    </div>
+</section>
+
+<!-- Model Performance Section -->
+<section class="analytics-section">
+    <div class="container">
+        <div class="analytics-header">
+            <h2>Machine Learning Models Comparison</h2>
+            <p>Performance metrics of 8 different algorithms</p>
+        </div>
+        
+        <!-- Model Cards -->
+        <div class="model-grid">
+            {% if models_data %}
+                {% for model in models_data %}
+                <div class="model-card">
+                    <div class="model-header">
+                        <h3>{{ model.Model }}</h3>
+                        {% if loop.index == 1 %}
+                        <span class="best-badge">
+                            <i class="fas fa-trophy"></i> Best
+                        </span>
+                        {% endif %}
+                    </div>
+                    <div class="model-metrics">
+                        <div class="metric">
+                            <span class="metric-label">Accuracy</span>
+                            <div class="metric-bar">
+                                <div class="metric-fill" style="width: {{ model.Accuracy * 100 }}%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+                            </div>
+                            <span class="metric-value">{{ "%.2f"|format(model.Accuracy * 100) }}%</span>
+                        </div>
+                        
+                        <div class="metric">
+                            <span class="metric-label">Precision</span>
+                            <div class="metric-bar">
+                                <div class="metric-fill" style="width: {{ model.Precision * 100 }}%; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div>
+                            </div>
+                            <span class="metric-value">{{ "%.2f"|format(model.Precision * 100) }}%</span>
+                        </div>
+                        
+                        <div class="metric">
+                            <span class="metric-label">Recall</span>
+                            <div class="metric-bar">
+                                <div class="metric-fill" style="width: {{ model.Recall * 100 }}%; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);"></div>
+                            </div>
+                            <span class="metric-value">{{ "%.2f"|format(model.Recall * 100) }}%</span>
+                        </div>
+                        
+                        <div class="metric">
+                            <span class="metric-label">F1-Score</span>
+                            <div class="metric-bar">
+                                <div class="metric-fill" style="width: {{ model['F1-Score'] * 100 }}%; background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);"></div>
+                            </div>
+                            <span class="metric-value">{{ "%.2f"|format(model['F1-Score'] * 100) }}%</span>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="no-data">
+                    <i class="fas fa-chart-line"></i>
+                    <p>Model performance data will be displayed here after training</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- Visualization Gallery -->
+<section class="visualization-gallery">
+    <div class="container">
+        <h2>Performance Visualizations</h2>
+        
+        <div class="viz-grid">
+            <div class="viz-card">
+                <img src="{{ url_for('static', filename='visualizations/model_comparison_visualization.png') }}" 
+                     alt="Model Comparison" onerror="this.src='https://via.placeholder.com/600x400?text=Model+Comparison'">
+                <h3>Model Comparison</h3>
+                <p>Comprehensive comparison of all metrics across models</p>
+            </div>
+            
+            <div class="viz-card">
+                <img src="{{ url_for('static', filename='visualizations/confusion_matrices.png') }}" 
+                     alt="Confusion Matrices" onerror="this.src='https://via.placeholder.com/600x400?text=Confusion+Matrices'">
+                <h3>Confusion Matrices</h3>
+                <p>True positive, false positive analysis for each model</p>
+            </div>
+            
+            <div class="viz-card">
+                <img src="{{ url_for('static', filename='visualizations/roc_curves.png') }}" 
+                     alt="ROC Curves" onerror="this.src='https://via.placeholder.com/600x400?text=ROC+Curves'">
+                <h3>ROC Curves</h3>
+                <p>Receiver Operating Characteristic curves showing model performance</p>
+            </div>
+            
+            <div class="viz-card">
+                <img src="{{ url_for('static', filename='visualizations/feature_importance.png') }}" 
+                     alt="Feature Importance" onerror="this.src='https://via.placeholder.com/600x400?text=Feature+Importance'">
+                <h3>Feature Importance</h3>
+                <p>Most influential features in predicting lung cancer</p>
+            </div>
+            
+            <div class="viz-card">
+                <img src="{{ url_for('static', filename='visualizations/correlation_heatmap.png') }}" 
+                     alt="Correlation Heatmap" onerror="this.src='https://via.placeholder.com/600x400?text=Correlation+Heatmap'">
+                <h3>Correlation Heatmap</h3>
+                <p>Relationships between different features</p>
+            </div>
+            
+            <div class="viz-card">
+                <img src="{{ url_for('static', filename='visualizations/target_distribution.png') }}" 
+                     alt="Target Distribution" onerror="this.src='https://via.placeholder.com/600x400?text=Target+Distribution'">
+                <h3>Target Distribution</h3>
+                <p>Distribution of cancer vs non-cancer cases in dataset</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
