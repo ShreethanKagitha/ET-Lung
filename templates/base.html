@@ -27,6 +27,12 @@
                 <li><a href="{{ url_for('prediction') }}" class="{% if request.endpoint == 'prediction' %}active{% endif %}">Prediction</a></li>
                 <li><a href="{{ url_for('visualizations') }}" class="{% if request.endpoint == 'visualizations' %}active{% endif %}">Analytics</a></li>
                 <li><a href="{{ url_for('contact') }}" class="{% if request.endpoint == 'contact' %}active{% endif %}">Contact</a></li>
+                {% if current_user.is_authenticated %}
+                <li><a href="{{ url_for('dashboard') }}" class="btn" style="color: #3498db; font-weight: bold;"><i class="fas fa-user-circle"></i> Dashboard</a></li>
+                <li><a href="{{ url_for('logout') }}" class="btn btn-secondary" style="padding: 8px 15px; background-color: #e74c3c; border:none; border-radius: 4px; color: white;">Logout</a></li>
+                {% else %}
+                <li><a href="{{ url_for('login') }}" class="btn btn-primary" style="padding: 8px 15px; border-radius: 4px; box-shadow: 0 4px 6px rgba(52, 152, 219, 0.3);">Login</a></li>
+                {% endif %}
             </ul>
             <div class="hamburger" id="hamburger">
                 <span></span>
@@ -46,48 +52,46 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h3><i class="fas fa-lungs"></i> LungCare AI</h3>
-                    <p>Advanced lung cancer prediction system powered by machine learning to help in early detection and diagnosis.</p>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-facebook"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-linkedin"></i></a>
-                        <a href="#"><i class="fab fa-github"></i></a>
+                    <h3 style="letter-spacing: -0.5px; font-size: 1.5rem;"><i class="fas fa-lungs" style="color: var(--primary-color);"></i> LungCare AI</h3>
+                    <p style="font-size: 0.95rem; line-height: 1.6;">Advanced predictive intelligence and ensemble diagnostics. Synthesizing risk through secure, distributed algorithms.</p>
+                    <div class="social-links" style="margin-top: 1.5rem; display: flex; gap: 15px;">
+                        <a href="https://github.com" target="_blank" style="font-size: 1.2rem; color: var(--text-light); transition: color 0.3s;"><i class="fab fa-github"></i></a>
+                        <a href="https://linkedin.com" target="_blank" style="font-size: 1.2rem; color: var(--text-light); transition: color 0.3s;"><i class="fab fa-linkedin"></i></a>
                     </div>
                 </div>
 
                 <div class="footer-section">
-                    <h4>Quick Links</h4>
-                    <ul>
-                        <li><a href="{{ url_for('index') }}">Home</a></li>
-                        <li><a href="{{ url_for('about') }}">About</a></li>
-                        <li><a href="{{ url_for('prediction') }}">Get Prediction</a></li>
-                        <li><a href="{{ url_for('visualizations') }}">Analytics</a></li>
+                    <h4 style="color: #fff; margin-bottom: 1.5rem; font-size: 1.1rem;">Quick Links</h4>
+                    <ul style="list-style: none; padding: 0; line-height: 2;">
+                        <li><a href="{{ url_for('index') }}" style="text-decoration: none;">Platform Overview</a></li>
+                        <li><a href="{{ url_for('about') }}" style="text-decoration: none;">System Architecture</a></li>
+                        <li><a href="{{ url_for('prediction') }}" style="text-decoration: none;">Run Diagnostics</a></li>
+                        <li><a href="{{ url_for('visualizations') }}" style="text-decoration: none;">Data Analytics</a></li>
                     </ul>
                 </div>
 
                 <div class="footer-section">
-                    <h4>Resources</h4>
-                    <ul>
-                        <li><a href="#">Documentation</a></li>
-                        <li><a href="#">Research Papers</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms of Service</a></li>
+                    <h4 style="color: #fff; margin-bottom: 1.5rem; font-size: 1.1rem;">Mandates & Security</h4>
+                    <ul style="list-style: none; padding: 0; line-height: 2;">
+                        <li><a href="{{ url_for('privacy') }}" style="text-decoration: none; display: flex; align-items: center; gap: 8px;"><i class="fas fa-shield-alt" style="color: #00ff9d; font-size: 0.8rem;"></i> Privacy Policy</a></li>
+                        <li><a href="{{ url_for('terms') }}" style="text-decoration: none;">Terms of Service</a></li>
+                        <li><a href="https://www.cdc.gov/cancer/lung/basic_info/screening.htm" target="_blank" style="text-decoration: none;">CDC Screening Guidelines</a></li>
+                        <li><a href="https://www.who.int/news-room/fact-sheets" target="_blank" style="text-decoration: none;">WHO Data Standards</a></li>
                     </ul>
                 </div>
 
                 <div class="footer-section">
-                    <h4>Contact Info</h4>
-                    <ul class="contact-info">
-                        <li><i class="fas fa-envelope"></i> info@lungcareai.com</li>
-                        <li><i class="fas fa-phone"></i> +91 1234567890</li>
-                        <li><i class="fas fa-map-marker-alt"></i> Bengaluru, Karnataka</li>
+                    <h4 style="color: #fff; margin-bottom: 1.5rem; font-size: 1.1rem;">Clinical Inquiries</h4>
+                    <ul class="contact-info" style="list-style: none; padding: 0; line-height: 2;">
+                        <li><i class="fas fa-envelope" style="width: 25px; color: var(--text-light);"></i> deployment@lungcareai.com</li>
+                        <li><i class="fas fa-server" style="width: 25px; color: var(--text-light);"></i> Web3 Node 0x7A2</li>
+                        <li><i class="fas fa-globe" style="width: 25px; color: var(--text-light);"></i> Global Inference Grid</li>
                     </ul>
                 </div>
             </div>
 
-            <div class="footer-bottom">
-                <p>&copy; 2025 LungCare AI. All rights reserved. | Developed with <i class="fas fa-heart"></i> for Better Healthcare</p>
+            <div class="footer-bottom" style="text-align: center; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.05); color: var(--text-light); font-size: 0.9rem;">
+                <p>&copy; 2026 LungCare AI Foundation. All rights reserved. | <i class="fas fa-lock" style="color: #00ff9d;"></i> End-to-End Encrypted Diagnostics</p>
             </div>
         </div>
     </footer>

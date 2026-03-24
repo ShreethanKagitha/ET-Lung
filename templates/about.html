@@ -4,45 +4,40 @@
 
 {% block content %}
 <!-- Page Header -->
-<section class="page-header">
+<section class="page-header" style="padding: 12rem 0 5rem; text-align: center;">
     <div class="container">
-        <h1><i class="fas fa-info-circle"></i> About LungCare AI</h1>
-        <p>Advanced AI technology for lung cancer detection and prevention</p>
+        <h1 style="font-size: 4.5rem; letter-spacing: -2px; margin-bottom: 1rem;"><i class="fas fa-project-diagram" style="color: var(--primary-color); opacity: 0.8; margin-right: 15px;"></i>Clinical Methodology</h1>
+        <p style="font-size: 1.3rem; opacity: 0.7; font-weight: 300;">Architecting the future of predictive pulmonary oncology algorithms.</p>
     </div>
 </section>
 
 <!-- About Content -->
-<section class="about-section">
+<section class="about-section" style="padding: 8rem 0;">
     <div class="container">
-        <div class="about-grid">
+        <div class="about-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;">
             <div class="about-content">
-                <h2>Our Mission</h2>
-                <p>
-                    LungCare AI is dedicated to revolutionizing lung cancer detection through 
-                    advanced artificial intelligence and machine learning technologies. Our mission 
-                    is to provide accessible, accurate, and early detection tools that can help 
-                    save lives by identifying lung cancer risks before symptoms appear.
+                <h2 style="font-size: 3rem; letter-spacing: -1px; margin-bottom: 2rem; color: #fff;">System Architecture</h2>
+                <p style="font-size: 1.15rem; color: var(--text-light); margin-bottom: 1.5rem; line-height: 1.8;">
+                    The Pulmonary Intelligence Platform is designed to bridge the gap between complex epidemiological data and actionable clinical insights. By uniting ensemble machine learning topologies with RAG-grounded natural language processing, our architecture delivers highly precise, instantly verifiable risk stratifications.
                 </p>
-                <p>
-                    By leveraging state-of-the-art machine learning algorithms trained on extensive 
-                    medical datasets, we aim to assist healthcare professionals and individuals in 
-                    making informed decisions about lung health.
+                <p style="font-size: 1.15rem; color: var(--text-light); line-height: 1.8;">
+                    Our framework synthesizes over eight specialized gradient-boosting schemas, processing vectors ranging from multi-decade pack-year histories to ambient bio-exposures, computing statistical matrices in sub-second latency environments.
                 </p>
             </div>
 
             <div class="about-image">
-                <div class="stats-box">
-                    <div class="stat">
-                        <h3>74.4%</h3>
-                        <p>Best Model Accuracy</p>
+                <div class="stats-box" style="display: grid; grid-template-columns: 1fr; gap: 1.5rem; background: rgba(255,255,255,0.02); backdrop-filter: blur(16px); padding: 3rem; border-radius: 20px; border: 1px solid var(--glass-border);">
+                    <div class="stat" style="border-bottom: 1px solid var(--glass-border); padding-bottom: 1.5rem;">
+                        <h3 style="font-size: 3rem; color: var(--primary-color);">74.4%</h3>
+                        <p style="color: var(--text-light); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Gradient Boosting Baseline Accuracy</p>
+                    </div>
+                    <div class="stat" style="border-bottom: 1px solid var(--glass-border); padding-bottom: 1.5rem;">
+                        <h3 style="font-size: 3rem; color: var(--primary-color);">8+</h3>
+                        <p style="color: var(--text-light); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Ensemble ML Topologies Processed</p>
                     </div>
                     <div class="stat">
-                        <h3>8</h3>
-                        <p>ML Algorithms</p>
-                    </div>
-                    <div class="stat">
-                        <h3>99.9%</h3>
-                        <p>Uptime</p>
+                        <h3 style="font-size: 3rem; color: var(--success-color);">&lt;200ms</h3>
+                        <p style="color: var(--text-light); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Inference Latency Target</p>
                     </div>
                 </div>
             </div>
@@ -51,116 +46,57 @@
 </section>
 
 <!-- Technology Section -->
-<section class="technology-section">
+<section class="technology-section" style="padding: 8rem 0; background: rgba(255,255,255,0.01); border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border);">
     <div class="container">
-        <div class="section-header">
-            <h2>Our Technology</h2>
-            <p>Advanced machine learning models powering our predictions</p>
+        <div class="section-header" style="text-align: center; margin-bottom: 5rem;">
+            <h2 style="font-size: 3rem; letter-spacing: -1px;">Core Compute Engines</h2>
+            <p style="font-size: 1.2rem; color: var(--text-light); margin-top: 1rem;">The foundational algorithms driving diagnostic accuracy.</p>
         </div>
 
-        <div class="tech-grid">
-            <div class="tech-card">
-                <div class="tech-icon">
+        <div class="tech-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2.5rem;">
+            <div class="tech-card" style="background: var(--glass-bg); padding: 2.5rem; border-radius: 16px; border: 1px solid var(--glass-border); transition: transform 0.3s ease;">
+                <div class="tech-icon" style="font-size: 2.5rem; color: var(--primary-color); margin-bottom: 1.5rem;">
                     <i class="fas fa-project-diagram"></i>
                 </div>
-                <h3>Gradient Boosting</h3>
-                <p>Our best performing model with 74.4% accuracy, utilizing ensemble learning techniques.</p>
+                <h3 style="margin-bottom: 1rem; font-size: 1.4rem;">Gradient Boosting</h3>
+                <p style="color: var(--text-light);">Our lead classifier optimizing predictive thresholds through iterative decision tree ensemble validation.</p>
             </div>
 
-            <div class="tech-card">
-                <div class="tech-icon">
+            <div class="tech-card" style="background: var(--glass-bg); padding: 2.5rem; border-radius: 16px; border: 1px solid var(--glass-border); transition: transform 0.3s ease;">
+                <div class="tech-icon" style="font-size: 2.5rem; color: var(--primary-color); margin-bottom: 1.5rem;">
                     <i class="fas fa-network-wired"></i>
                 </div>
-                <h3>XGBoost</h3>
-                <p>Extreme Gradient Boosting for high-performance predictions with regularization.</p>
+                <h3 style="margin-bottom: 1rem; font-size: 1.4rem;">XGBoost Logic</h3>
+                <p style="color: var(--text-light);">Extreme Gradient Boosting leveraged to prevent model overfitting while maintaining high-performance regularization matrices.</p>
             </div>
 
-            <div class="tech-card">
-                <div class="tech-icon">
-                    <i class="fas fa-tree"></i>
-                </div>
-                <h3>Random Forest</h3>
-                <p>Ensemble of decision trees providing robust and reliable predictions.</p>
-            </div>
-
-            <div class="tech-card">
-                <div class="tech-icon">
+            <div class="tech-card" style="background: var(--glass-bg); padding: 2.5rem; border-radius: 16px; border: 1px solid var(--glass-border); transition: transform 0.3s ease;">
+                <div class="tech-icon" style="font-size: 2.5rem; color: var(--primary-color); margin-bottom: 1.5rem;">
                     <i class="fas fa-brain"></i>
                 </div>
-                <h3>Neural Networks</h3>
-                <p>Deep learning approaches for complex pattern recognition in medical data.</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Features Section -->
-<section class="about-features">
-    <div class="container">
-        <h2 class="text-center">Key Features</h2>
-
-        <div class="features-list">
-            <div class="feature-item">
-                <div class="feature-icon-circle">
-                    <i class="fas fa-database"></i>
-                </div>
-                <div class="feature-details">
-                    <h3>Comprehensive Data Analysis</h3>
-                    <p>Analyzes 9+ clinical parameters including age, smoking history, environmental exposure, and family history.</p>
-                </div>
-            </div>
-
-            <div class="feature-item">
-                <div class="feature-icon-circle">
-                    <i class="fas fa-chart-line"></i>
-                </div>
-                <div class="feature-details">
-                    <h3>Model Comparison</h3>
-                    <p>Utilizes 8 different machine learning algorithms to ensure the most accurate predictions.</p>
-                </div>
-            </div>
-
-            <div class="feature-item">
-                <div class="feature-icon-circle">
-                    <i class="fas fa-eye"></i>
-                </div>
-                <div class="feature-details">
-                    <h3>Visual Results</h3>
-                    <p>Easy-to-understand graphical representation of risk assessment and probability scores.</p>
-                </div>
-            </div>
-
-            <div class="feature-item">
-                <div class="feature-icon-circle">
-                    <i class="fas fa-lock"></i>
-                </div>
-                <div class="feature-details">
-                    <h3>Data Privacy</h3>
-                    <p>All data is processed securely with encryption and is never stored permanently.</p>
-                </div>
+                <h3 style="margin-bottom: 1rem; font-size: 1.4rem;">Generative Verification</h3>
+                <p style="color: var(--text-light);">Deeply integrated Gemini LLM pipelines that parse raw probabilistic outputs against verified WHO and CDC epidemiological constraints.</p>
             </div>
         </div>
     </div>
 </section>
 
 <!-- Team Section -->
-<section class="disclaimer-section">
+<section class="disclaimer-section" style="padding: 10rem 0;">
     <div class="container">
-        <div class="disclaimer-box">
-            <div class="disclaimer-icon">
+        <div class="disclaimer-box" style="background: rgba(255, 184, 0, 0.05); border-left: 4px solid var(--warning-color); padding: 3rem; border-radius: 12px; max-width: 900px; margin: 0 auto; display: flex; gap: 2rem; align-items: flex-start;">
+            <div class="disclaimer-icon" style="font-size: 3rem; color: var(--warning-color);">
                 <i class="fas fa-exclamation-triangle"></i>
             </div>
-            <h3>Medical Disclaimer</h3>
-            <p>
-                This AI-powered prediction system is designed as a screening and awareness tool. 
-                It should NOT be used as a substitute for professional medical diagnosis, advice, 
-                or treatment. Always consult with qualified healthcare professionals for proper 
-                medical evaluation and diagnosis.
-            </p>
-            <p>
-                The predictions provided by this system are based on statistical models and should 
-                be interpreted as risk indicators rather than definitive diagnoses.
-            </p>
+            <div>
+                <h3 style="font-size: 1.8rem; margin-bottom: 1rem; color: #fff;">Clinical Ethics & Medical Disclaimer</h3>
+                <p style="color: var(--text-light); font-size: 1.1rem; line-height: 1.7; margin-bottom: 1rem;">
+                    This platform functions strictly as a computational risk stratification utility. It synthesizes statistical correlations based on user-provided vectors against trained datasets. It must <strong>never</strong> supersede, augment, or replace standardized medical procedures, radiological scans, or professional oncological diagnostics.
+                </p>
+                <p style="color: var(--text-light); font-size: 1.1rem; line-height: 1.7;">
+                    Outputs should be viewed as probabilistic indicators. Authorized medical professionals should review all flagged risk factors in accordance with established medical protocols.
+                </p>
+            </div>
         </div>
     </div>
 </section>

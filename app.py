@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, send_from_directory
+from flask import Flask, render_template, request, jsonify, send_from_directory, redirect, url_for, flash
 import pandas as pd
 import numpy as np
 import joblib
@@ -11,9 +11,45 @@ import seaborn as sns
 from datetime import datetime
 import base64
 from io import BytesIO
+import genai_service
+from flask_sqlalchemy import SQLAlchemy
+from flask_bcrypt import Bcrypt
+from flask_login import LoginManager, UserMixin, login_user, current_user, logout_user, login_required
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'lung-cancer-prediction-2025'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///lungcare.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = SQLAlchemy(app)
+bcrypt = Bcrypt(app)
+login_manager = LoginManager(app)
+login_manager.login_view = 'login'
+login_manager.login_message_category = 'info'
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+class User(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(20), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password = db.Column(db.String(60), nullable=False)
+    # Relationship to PredictionHistory
+    predictions = db.relationship('PredictionHistory', backref='author', lazy=True)
+
+class PredictionHistory(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    risk_probability = db.Column(db.Float, nullable=False)
+    risk_level = db.Column(db.String(50), nullable=False)
+    prediction_result = db.Column(db.String(50), nullable=False)
+    personalized_report = db.Column(db.Text, nullable=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+with app.app_context():
+    db.create_all()
 
 # Load trained models and preprocessors
 try:
@@ -61,6 +97,71 @@ def visualizations():
 def contact():
     """Contact page"""
     return render_template('contact.html')
+
+@app.route('/privacy')
+def privacy():
+    """Privacy Policy page"""
+    return render_template('privacy.html')
+
+@app.route('/terms')
+def terms():
+    """Terms of Service page"""
+    return render_template('terms.html')
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    """User Registration Route"""
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    if request.method == 'POST':
+        username = request.form.get('username')
+        email = request.form.get('email')
+        password = request.form.get('password')
+        
+        # Check if user exists
+        user_exists = User.query.filter_by(email=email).first() or User.query.filter_by(username=username).first()
+        if user_exists:
+            flash('Email or Username already exists. Please choose a different one.', 'danger')
+            return redirect(url_for('register'))
+            
+        hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+        user = User(username=username, email=email, password=hashed_password)
+        db.session.add(user)
+        db.session.commit()
+        flash('Your account has been created! You can now log in.', 'success')
+        return redirect(url_for('login'))
+    return render_template('register.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    """User Login Route"""
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    if request.method == 'POST':
+        email = request.form.get('email')
+        password = request.form.get('password')
+        user = User.query.filter_by(email=email).first()
+        if user and bcrypt.check_password_hash(user.password, password):
+            login_user(user, remember=True)
+            next_page = request.args.get('next')
+            flash('Logged in successfully.', 'success')
+            return redirect(next_page) if next_page else redirect(url_for('dashboard'))
+        else:
+            flash('Login Unsuccessful. Please check email and password', 'danger')
+    return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    """User Logout Route"""
+    logout_user()
+    return redirect(url_for('index'))
+
+@app.route('/dashboard')
+@login_required
+def dashboard():
+    """User Dashboard - Prediction History"""
+    history = PredictionHistory.query.filter_by(author=current_user).order_by(PredictionHistory.date_posted.desc()).all()
+    return render_template('dashboard.html', history=history)
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -120,6 +221,21 @@ def predict():
         # Generate prediction chart
         chart_data = generate_prediction_chart(probability, result)
 
+        # Generate personalized report
+        personalized_report = genai_service.generate_personalized_report(patient_data, round(cancer_prob, 2), result)
+
+        # Save to database if user is logged in
+        if current_user.is_authenticated:
+            new_pred = PredictionHistory(
+                risk_probability=round(cancer_prob, 2),
+                risk_level=risk_level,
+                prediction_result=result,
+                personalized_report=personalized_report,
+                author=current_user
+            )
+            db.session.add(new_pred)
+            db.session.commit()
+
         return jsonify({
             'success': True,
             'prediction': result,
@@ -130,6 +246,7 @@ def predict():
             'risk_level': risk_level,
             'risk_color': risk_color,
             'chart_data': chart_data,
+            'personalized_report': personalized_report,
             'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         })
 
@@ -213,6 +330,34 @@ def model_performance():
 def serve_visualization(filename):
     """Serve visualization images"""
     return send_from_directory('static/visualizations', filename)
+
+@app.route('/chat', methods=['POST'])
+def chat():
+    """Handle chat messages for the GenAI conversational assistant"""
+    try:
+        data = request.get_json()
+        user_message = data.get('message', '')
+        # Expecting string or format it if needed
+        conversation_history = data.get('history', '')
+        
+        response = genai_service.conversational_chat(user_message, conversation_history)
+        return jsonify({'response': response})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
+
+@app.route('/api/parse-voice', methods=['POST'])
+def parse_voice():
+    """Endpoint to take raw voice STT transcripts and parse them into structured ML data"""
+    try:
+        data = request.get_json()
+        transcript = data.get('transcript', '')
+        if not transcript:
+            return jsonify({'error': 'No transcript provided'}), 400
+            
+        parsed_data = genai_service.extract_patient_data(transcript)
+        return jsonify(parsed_data)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     print("\n" + "="*60)

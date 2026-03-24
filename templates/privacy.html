@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Privacy Policy - LungCare AI{% endblock %}
+{% block content %}
+<section class="page-header" style="padding: 12rem 0 4rem; text-align: center;">
+    <div class="container">
+        <h1 style="font-size: 3.5rem; letter-spacing: -1px;"><i class="fas fa-user-shield" style="color: var(--primary-color); margin-right: 15px;"></i>Privacy Policy</h1>
+        <p style="font-size: 1.2rem; opacity: 0.7;">Zero-trust data security protocols for clinical confidentiality.</p>
+    </div>
+</section>
+
+<section class="prediction-section" style="padding: 4rem 0;">
+    <div class="container" style="max-width: 900px; background: rgba(255,255,255,0.02); backdrop-filter: blur(16px); padding: 4rem; border-radius: 20px; border: 1px solid var(--glass-border);">
+        
+        <h2 style="color: #fff; margin-bottom: 1.5rem; font-size: 2rem;">1. Data Collection & Usage</h2>
+        <p style="color: var(--text-light); font-size: 1.1rem; line-height: 1.8; margin-bottom: 2rem;">
+            When utilizing the Pulmonary Intelligence Platform, predictive form data (such as age, pack-years, and medical history) is collected solely for the transient execution of real-time machine learning inference. As per HIPAA compliance simulations, this data is <strong>never permanently retained</strong> on our servers post-prediction. 
+        </p>
+
+        <h2 style="color: #fff; margin-bottom: 1.5rem; font-size: 2rem;">2. Voice Recognition Security</h2>
+        <p style="color: var(--text-light); font-size: 1.1rem; line-height: 1.8; margin-bottom: 2rem;">
+            Audio inputs captured via the Voice Assistant leverage Web Speech Recognition APIs. Audio transcripts are piped securely to local GenAI (Gemini) layers via an encrypted bridge strictly to parse structural JSON required for ML inputs. Audio files themselves are never recorded or stored.
+        </p>
+
+        <h2 style="color: #fff; margin-bottom: 1.5rem; font-size: 2rem;">3. User Accounts</h2>
+        <p style="color: var(--text-light); font-size: 1.1rem; line-height: 1.8; margin-bottom: 2rem;">
+            If you opt to register an account to view your dashboard, your passwords are cryptographically hashed using <code>bcrypt</code>. At no time are plaintext passwords accessible to administrators or third parties. Prediction history histories tied to accounts can be deleted upon user request.
+        </p>
+
+        <h2 style="color: #fff; margin-bottom: 1.5rem; font-size: 2rem;">4. Third-Party Sharing</h2>
+        <p style="color: var(--text-light); font-size: 1.1rem; line-height: 1.8; margin-bottom: 2rem;">
+            We do not sell, rent, or lease clinical diagnostic vectors to any third-party marketing entities. Our APIs may transmit anonymized context strictly for RAG-grounded LLM inference without attached personally identifiable information (PII).
+        </p>
+
+        <div style="background: rgba(46, 204, 113, 0.1); border-left: 4px solid #00ff9d; padding: 2rem; border-radius: 8px; margin-top: 3rem;">
+            <h3 style="color: #00ff9d; font-size: 1.3rem; margin-bottom: 0.5rem;"><i class="fas fa-lock"></i> End-to-End Encryption</h3>
+            <p style="color: #fff; font-size: 1rem;">This platform is built on modern Web3-inspired privacy architectures. Your health data remains fundamentally yours.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

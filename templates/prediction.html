@@ -16,9 +16,20 @@
     <div class="container">
         <div class="prediction-container">
             <div class="form-container">
+                <!-- A.I. VOICE ASSISTANT -->
+                <div class="voice-assistant-container" style="text-align: center; margin-bottom: 30px; padding: 25px; background: linear-gradient(135deg, #1e3c72, #2a5298); border-radius: 12px; color: white; box-shadow: 0 10px 20px rgba(0,0,0,0.15); position: relative; overflow: hidden;">
+                    <h3 style="margin-bottom: 10px; font-weight: 700;"><i class="fas fa-satellite-dish" style="margin-right: 8px;"></i> Voice-Enabled Health Assistant</h3>
+                    <p style="opacity: 0.9; margin-bottom: 20px; font-size: 0.95rem;">Skip the manual form! Click the microphone and describe your medical history:<br/> <em>"I'm a 65 year old male, I smoked 2 packs a day for 20 years, and I have a family history of cancer."</em></p>
+                    
+                    <button id="voice-btn" type="button" style="width: 80px; height: 80px; border-radius: 50%; background: #e74c3c; color: white; border: 4px solid rgba(255,255,255,0.2); font-size: 30px; cursor: pointer; transition: transform 0.3s, background 0.3s, box-shadow 0.3s; box-shadow: 0 0 20px rgba(231, 76, 60, 0.6); display: flex; align-items: center; justify-content: center; margin: 0 auto; z-index: 2; position: relative;">
+                        <i class="fas fa-microphone" id="mic-icon"></i>
+                    </button>
+                    <div id="voice-status" style="margin-top: 15px; font-weight: bold; min-height: 24px; font-size: 1.1rem; color: #f1c40f;">Click microphone to start...</div>
+                </div>
+
                 <div class="form-header">
-                    <h2>Patient Information Form</h2>
-                    <p>All fields are required for accurate prediction</p>
+                    <h2>Manual Entry Form</h2>
+                    <p>Or fill out the exact patient details below</p>
                 </div>
                 
                 <form id="predictionForm">
@@ -181,6 +192,16 @@
                         <img id="resultChart" src="" alt="Prediction Chart">
                     </div>
                     
+                    <!-- NEW GENAI REPORT SECTION -->
+                    <div class="genai-report-container" id="genaiReport" style="margin-top: 30px; padding: 25px; background: linear-gradient(145deg, #ffffff, #f0f4f8); border-left: 6px solid #3498db; border-radius: 12px; box-shadow: 0 8px 16px rgba(0,0,0,0.05); display: none;">
+                        <h3 style="color: #2c3e50; margin-bottom: 15px; font-weight: 700; border-bottom: 1px solid #e1e8ed; padding-bottom: 10px;">
+                            <i class="fas fa-robot" style="color: #3498db; margin-right: 8px;"></i> Personalized AI Analysis
+                        </h3>
+                        <div id="personalizedReportContent" style="color: #4a5568; line-height: 1.7; font-size: 1.05rem;">
+                            <!-- GenAI Content Injected Here -->
+                        </div>
+                    </div>
+                    
                     <div class="result-info">
                         <div class="info-box">
                             <i class="fas fa-info-circle"></i>
@@ -205,6 +226,40 @@
         </div>
     </div>
 </section>
+
+<!-- FLOATING CHATBOT WIDGET -->
+<div id="chatbot-widget" style="position: fixed; bottom: 30px; right: 30px; z-index: 1000;">
+    <!-- Chat Button -->
+    <button id="chat-toggle-btn" style="width: 65px; height: 65px; border-radius: 50%; background: linear-gradient(135deg, #3498db, #2980b9); color: white; border: none; box-shadow: 0 6px 16px rgba(52, 152, 219, 0.4); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 28px; transition: transform 0.3s ease;">
+        <i class="fas fa-comment-medical"></i>
+    </button>
+    
+    <!-- Chat Window -->
+    <div id="chat-window" style="display: none; position: absolute; bottom: 85px; right: 0; width: 360px; height: 480px; background-color: white; border-radius: 16px; box-shadow: 0 12px 28px rgba(0,0,0,0.15); border: 1px solid #e1e8ed; overflow: hidden; flex-direction: column;">
+        <!-- Chat Header -->
+        <div style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 18px 20px; display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <i class="fas fa-user-md" style="font-size: 20px;"></i>
+                <h4 style="margin: 0; font-size: 1.1rem; font-weight: 600;">Health AI Assistant</h4>
+            </div>
+            <button id="close-chat-btn" style="background: none; border: none; color: white; cursor: pointer; font-size: 18px;"><i class="fas fa-times"></i></button>
+        </div>
+        
+        <!-- Chat Messages -->
+        <div id="chat-messages" style="flex-grow: 1; padding: 20px; overflow-y: auto; background-color: #f7f9fc; display: flex; flex-direction: column; gap: 12px;">
+            <div class="message ai-message" style="background-color: white; padding: 12px 16px; border-radius: 16px 16px 16px 0; border: 1px solid #e1e8ed; color: #2c3e50; font-size: 0.95rem; align-self: flex-start; max-width: 85%; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+                Hello! I'm your AI health assistant. I can help explain your risk assessment or answer questions about lung health.
+            </div>
+        </div>
+        
+        <!-- Chat Input -->
+        <div style="padding: 15px; background-color: white; border-top: 1px solid #e1e8ed; display: flex; gap: 10px;">
+            <input type="text" id="chat-input" placeholder="Type your question..." style="flex-grow: 1; padding: 12px 16px; border: 1px solid #ccd1d9; border-radius: 20px; outline: none; transition: border-color 0.2s;" onfocus="this.style.borderColor='#3498db'" onblur="this.style.borderColor='#ccd1d9'">
+            <button id="send-chat-btn" style="background: #3498db; color: white; border: none; width: 42px; height: 42px; border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: background-color 0.2s;" onmouseover="this.style.backgroundColor='#2980b9'" onmouseout="this.style.backgroundColor='#3498db'"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
 
 {% block extra_js %}
@@ -293,6 +348,21 @@ function displayResults(result) {
         document.getElementById('resultChart').src = 'data:image/png;base64,' + result.chart_data;
     }
     
+    // Set GenAI Personalized Report
+    if (result.personalized_report) {
+        document.getElementById('personalizedReportContent').innerHTML = result.personalized_report;
+        document.getElementById('genaiReport').style.display = 'block';
+        
+        // Auto-speach (TTS) the summary if voice was used
+        if (window.voiceUsed) {
+            speakText("Here is your risk assessment. " + result.personalized_report.replace(/<[^>]*>?/gm, ''));
+            window.voiceUsed = false; // reset
+        }
+    } else {
+        document.getElementById('genaiReport').style.display = 'none';
+        console.log("No GenAI report returned from server");
+    }
+    
     // Set timestamp
     document.getElementById('timestamp').textContent = 'Generated on: ' + result.timestamp;
 }
@@ -301,5 +371,204 @@ document.getElementById('closeResult').addEventListener('click', function() {
     document.getElementById('resultContainer').style.display = 'none';
     window.scrollTo({ top: 0, behavior: 'smooth' });
 });
+
+// Chatbot functionality
+let conversationHistory = "";
+const chatToggleBtn = document.getElementById('chat-toggle-btn');
+const chatWindow = document.getElementById('chat-window');
+const closeChatBtn = document.getElementById('close-chat-btn');
+const chatInput = document.getElementById('chat-input');
+const sendChatBtn = document.getElementById('send-chat-btn');
+const chatMessages = document.getElementById('chat-messages');
+
+chatToggleBtn.addEventListener('click', () => {
+    chatWindow.style.display = 'flex';
+    chatToggleBtn.style.transform = 'scale(0)';
+    setTimeout(() => chatToggleBtn.style.display = 'none', 300);
+});
+
+closeChatBtn.addEventListener('click', () => {
+    chatToggleBtn.style.display = 'flex';
+    setTimeout(() => chatToggleBtn.style.transform = 'scale(1)', 10);
+    chatWindow.style.display = 'none';
+});
+
+function appendMessage(text, isAi) {
+    const msgDiv = document.createElement('div');
+    msgDiv.textContent = text;
+    if (isAi) {
+        msgDiv.style.cssText = "background-color: white; padding: 12px 16px; border-radius: 16px 16px 16px 0; border: 1px solid #e1e8ed; color: #2c3e50; font-size: 0.95rem; align-self: flex-start; max-width: 85%; box-shadow: 0 2px 4px rgba(0,0,0,0.02); margin-bottom: 12px;";
+        conversationHistory += "AI Assistant: " + text + "\n";
+    } else {
+        msgDiv.style.cssText = "background-color: #3498db; color: white; padding: 12px 16px; border-radius: 16px 16px 0 16px; font-size: 0.95rem; align-self: flex-end; max-width: 85%; box-shadow: 0 2px 4px rgba(52,152,219,0.3); margin-bottom: 12px;";
+        conversationHistory += "Patient: " + text + "\n";
+    }
+    chatMessages.appendChild(msgDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+async function sendMessage() {
+    const text = chatInput.value.trim();
+    if (!text) return;
+    
+    appendMessage(text, false);
+    chatInput.value = '';
+    
+    // Add loading indicator
+    const loadingId = 'loading-' + Date.now();
+    const loadingDiv = document.createElement('div');
+    loadingDiv.id = loadingId;
+    loadingDiv.innerHTML = '<i class="fas fa-circle-notch fa-spin" style="color: #3498db; font-size: 20px;"></i>';
+    loadingDiv.style.cssText = "align-self: flex-start; margin-bottom: 12px;";
+    chatMessages.appendChild(loadingDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    
+    try {
+        const response = await fetch('/chat', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ message: text, history: conversationHistory })
+        });
+        
+        const data = await response.json();
+        document.getElementById(loadingId).remove();
+        
+        if (data.error) {
+            appendMessage("Sorry, I encountered an error: " + data.error, true);
+        } else {
+            appendMessage(data.response, true);
+        }
+    } catch (err) {
+        document.getElementById(loadingId).remove();
+        appendMessage("Network error. Please try again.", true);
+    }
+}
+
+sendChatBtn.addEventListener('click', sendMessage);
+chatInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') sendMessage();
+});
+
+// Voice-to-Form & TTS Magic capabilities
+const voiceBtn = document.getElementById('voice-btn');
+const voiceStatus = document.getElementById('voice-status');
+const micIcon = document.getElementById('mic-icon');
+let isRecording = false;
+let speechRec;
+
+window.voiceUsed = false; // Flag to tell the UI to auto-play audio after prediction
+
+function speakText(text) {
+    if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel(); // clear previous
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = 1.0;
+        utterance.pitch = 1.0;
+        window.speechSynthesis.speak(utterance);
+    }
+}
+
+if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    speechRec = new SpeechRecognition();
+    speechRec.continuous = false;
+    speechRec.interimResults = true;
+    
+    speechRec.onstart = function() {
+        isRecording = true;
+        voiceStatus.innerText = "Listening... Speak now!";
+        voiceBtn.style.transform = 'scale(1.1)';
+        voiceBtn.style.boxShadow = '0 0 40px rgba(231, 76, 60, 0.9)';
+        micIcon.classList.add('fa-beat-fade');
+    };
+    
+    speechRec.onresult = function(event) {
+        let interimTranscript = '';
+        let finalTranscript = '';
+        
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+            if (event.results[i].isFinal) {
+                finalTranscript += event.results[i][0].transcript;
+            } else {
+                interimTranscript += event.results[i][0].transcript;
+            }
+        }
+        if (interimTranscript) {
+            voiceStatus.innerText = interimTranscript;
+        }
+        if (finalTranscript) {
+            voiceStatus.innerText = "Processing GenAI magic...";
+            processVoiceTranscript(finalTranscript);
+        }
+    };
+    
+    speechRec.onerror = function(event) {
+        console.error('Speech recognition error', event.error);
+        voiceStatus.innerText = "Error: " + event.error;
+        stopRecordingUI();
+    };
+    
+    speechRec.onend = function() {
+        if (isRecording) stopRecordingUI();
+    };
+    
+    voiceBtn.addEventListener('click', function() {
+        if (!isRecording) {
+            speechRec.start();
+        } else {
+            speechRec.stop();
+        }
+    });
+
+} else {
+    voiceBtn.style.display = 'none';
+    voiceStatus.innerText = "Speech Recognition APIs not supported in this browser. Please use Chrome.";
+}
+
+function stopRecordingUI() {
+    isRecording = false;
+    voiceBtn.style.transform = 'scale(1)';
+    voiceBtn.style.boxShadow = '0 0 20px rgba(231, 76, 60, 0.6)';
+    micIcon.classList.remove('fa-beat-fade');
+}
+
+async function processVoiceTranscript(transcript) {
+    try {
+        micIcon.className = "fas fa-spinner fa-spin";
+        const response = await fetch('/api/parse-voice', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ transcript: transcript })
+        });
+        
+        const data = await response.json();
+        
+        if (data.error) throw new Error(data.error);
+        
+        // Auto-fill form fields
+        if(data.age) document.getElementById('age').value = data.age;
+        if(data.gender) document.getElementById('gender').value = data.gender;
+        if(data.pack_years !== undefined) document.getElementById('pack_years').value = data.pack_years;
+        if(data.radon_exposure) document.getElementById('radon_exposure').value = data.radon_exposure;
+        if(data.asbestos_exposure) document.getElementById('asbestos_exposure').value = data.asbestos_exposure;
+        if(data.secondhand_smoke_exposure) document.getElementById('secondhand_smoke_exposure').value = data.secondhand_smoke_exposure;
+        if(data.copd_diagnosis) document.getElementById('copd_diagnosis').value = data.copd_diagnosis;
+        if(data.alcohol_consumption) document.getElementById('alcohol_consumption').value = data.alcohol_consumption;
+        if(data.family_history) document.getElementById('family_history').value = data.family_history;
+        
+        voiceStatus.innerText = "Form filled! Requesting Prediction...";
+        micIcon.className = "fas fa-microphone";
+        
+        // Let the system know Voice was used to auto-play audio at the end
+        window.voiceUsed = true;
+        
+        // Automatically trigger prediction submission
+        document.getElementById('predictBtn').click();
+        
+    } catch (err) {
+        voiceStatus.innerText = "Failed to parse: " + err.message;
+        micIcon.className = "fas fa-microphone";
+    }
+}
 </script>
 {% endblock %}

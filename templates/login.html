@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Login - LungCare AI{% endblock %}
+{% block content %}
+<section class="prediction-section">
+    <div class="container" style="max-width: 500px; margin-top: 50px; margin-bottom: 50px;">
+        <div class="form-container" style="padding: 40px;">
+            <div class="form-header">
+                <h2>Welcome Back</h2>
+                <p>Login to view your AI prediction history</p>
+            </div>
+            
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div style="padding: 15px; margin-bottom: 20px; border-radius: 4px; color: white; font-weight: bold; background-color: {% if category == 'danger' %}#e74c3c{% else %}#2ecc71{% endif %};">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST" action="">
+                <div class="form-group" style="text-align: left;">
+                    <label style="font-weight: bold; color: #2c3e50;"><i class="fas fa-envelope"></i> Email Address</label>
+                    <input type="email" name="email" required placeholder="Enter your email" style="width: 100%; padding: 12px; margin-top: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                </div>
+                <div class="form-group" style="text-align: left; margin-top: 20px;">
+                    <label style="font-weight: bold; color: #2c3e50;"><i class="fas fa-lock"></i> Password</label>
+                    <input type="password" name="password" required placeholder="Enter your password" style="width: 100%; padding: 12px; margin-top: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                </div>
+                <div class="form-actions" style="margin-top: 30px;">
+                    <button type="submit" class="btn btn-primary" style="width: 100%; font-size: 1.1rem; padding: 12px;"><i class="fas fa-sign-in-alt"></i> Login</button>
+                </div>
+            </form>
+            <div style="text-align: center; margin-top: 25px; border-top: 1px solid #eee; padding-top: 20px;">
+                <p style="color: #7f8c8d;">Don't have an account? <a href="{{ url_for('register') }}" style="color: #3498db; text-decoration: none; font-weight: bold;">Sign up here</a></p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
