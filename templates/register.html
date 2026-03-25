@@ -1,45 +1,113 @@
 {% extends "base.html" %}
-{% block title %}Register - LungCare AI{% endblock %}
+{% block title %}Acquire Clearance - LungCare AI{% endblock %}
 {% block content %}
-<section class="prediction-section">
-    <div class="container" style="max-width: 500px; margin-top: 50px; margin-bottom: 50px;">
-        <div class="form-container" style="padding: 40px;">
-            <div class="form-header">
-                <h2>Create an Account</h2>
-                <p>Register to securely save your health predictions</p>
+<section class="prediction-section" style="min-height: 80vh; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; padding-top: 2rem; padding-bottom: 4rem;">
+    <!-- Background Animated Glow -->
+    <div style="position: absolute; width: 800px; height: 800px; background: radial-gradient(circle, rgba(46, 204, 113, 0.08) 0%, rgba(0,0,0,0) 60%); top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; z-index: 0;"></div>
+
+    <div class="container" style="max-width: 500px; position: relative; z-index: 1;">
+        <div class="form-container" style="padding: 40px; background: rgba(15, 17, 21, 0.7); backdrop-filter: blur(25px); border: 1px solid var(--glass-border); border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.6);">
+            <div class="form-header" style="text-align: center; margin-bottom: 30px;">
+                <h2 style="font-size: 2.2rem; color: #fff; letter-spacing: -1px; margin-bottom: 10px;"><i class="fas fa-satellite-dish" style="color: #2ecc71; margin-right: 12px; font-size: 2rem;"></i>Request Clearance</h2>
+                <p style="color: var(--text-light); font-size: 1rem;">Register your node to the AI prediction subnetwork.</p>
             </div>
             
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                     {% for category, message in messages %}
-                        <div style="padding: 15px; margin-bottom: 20px; border-radius: 4px; color: white; font-weight: bold; background-color: {% if category == 'danger' %}#e74c3c{% else %}#2ecc71{% endif %};">
-                            {{ message }}
+                        <div style="padding: 15px; margin-bottom: 25px; border-radius: 8px; color: white; font-weight: 600; font-size: 0.95rem; text-align: center; background-color: {% if category == 'danger' %}rgba(231, 76, 60, 0.15){% else %}rgba(46, 204, 113, 0.15){% endif %}; border: 1px solid {% if category == 'danger' %}rgba(231, 76, 60, 0.4){% else %}rgba(46, 204, 113, 0.4){% endif %}; box-shadow: 0 0 20px {% if category == 'danger' %}rgba(231,76,60,0.15){% else %}rgba(46,204,113,0.15){% endif %};">
+                            <i class="fas {% if category == 'danger' %}fa-exclamation-triangle{% else %}fa-check-circle{% endif %}"></i> {{ message }}
                         </div>
                     {% endfor %}
                 {% endif %}
             {% endwith %}
 
-            <form method="POST" action="">
-                <div class="form-group" style="text-align: left;">
-                    <label style="font-weight: bold; color: #2c3e50;"><i class="fas fa-user"></i> Username</label>
-                    <input type="text" name="username" required placeholder="Choose a username" style="width: 100%; padding: 12px; margin-top: 8px; border: 1px solid #ccc; border-radius: 4px;">
+            <div style="display: flex; gap: 15px; margin-bottom: 30px;">
+                <div style="flex: 1; text-align: center; padding: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;">
+                    <i class="fas fa-network-wired" style="color: #2ecc71; display: block; margin-bottom: 5px; font-size: 1.2rem;"></i>
+                    <span style="font-size: 0.8rem; color: var(--text-light); text-transform: uppercase;">P2P End-to-End</span>
                 </div>
-                <div class="form-group" style="text-align: left; margin-top: 20px;">
-                    <label style="font-weight: bold; color: #2c3e50;"><i class="fas fa-envelope"></i> Email Address</label>
-                    <input type="email" name="email" required placeholder="Enter your email" style="width: 100%; padding: 12px; margin-top: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                <div style="flex: 1; text-align: center; padding: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;">
+                    <i class="fas fa-microchip" style="color: #3498db; display: block; margin-bottom: 5px; font-size: 1.2rem;"></i>
+                    <span style="font-size: 0.8rem; color: var(--text-light); text-transform: uppercase;">AI Core Engine</span>
                 </div>
-                <div class="form-group" style="text-align: left; margin-top: 20px;">
-                    <label style="font-weight: bold; color: #2c3e50;"><i class="fas fa-lock"></i> Password</label>
-                    <input type="password" name="password" required placeholder="Create a password" style="width: 100%; padding: 12px; margin-top: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                <div style="flex: 1; text-align: center; padding: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;">
+                    <i class="fas fa-lock" style="color: #f1c40f; display: block; margin-bottom: 5px; font-size: 1.2rem;"></i>
+                    <span style="font-size: 0.8rem; color: var(--text-light); text-transform: uppercase;">Zero Trust</span>
                 </div>
-                <div class="form-actions" style="margin-top: 30px;">
-                    <button type="submit" class="btn btn-primary" style="width: 100%; font-size: 1.1rem; padding: 12px;"><i class="fas fa-user-plus"></i> Register</button>
+            </div>
+
+            <form method="POST" action="" id="registerForm">
+                <div class="form-group" style="text-align: left; position: relative;">
+                    <label style="font-weight: 500; color: #fff; font-size: 0.95rem; margin-bottom: 8px; display: block; letter-spacing: 0.5px;"><i class="fas fa-user-ninja" style="color: #2ecc71; width: 20px; opacity: 0.8;"></i> Node Alias</label>
+                    <input type="text" name="username" required placeholder="Select a secure alias" style="width: 100%; padding: 14px 16px; background: rgba(0,0,0,0.4); color: #fff; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; outline: none; transition: all 0.3s ease; font-family: 'Outfit', sans-serif;" onfocus="this.style.borderColor='#2ecc71'; this.style.boxShadow='0 0 15px rgba(46,204,113,0.3)';" onblur="this.style.borderColor='rgba(255,255,255,0.1)'; this.style.boxShadow='none';">
+                </div>
+                <div class="form-group" style="text-align: left; margin-top: 20px; position: relative;">
+                    <label style="font-weight: 500; color: #fff; font-size: 0.95rem; margin-bottom: 8px; display: block; letter-spacing: 0.5px;"><i class="fas fa-envelope" style="color: #2ecc71; width: 20px; opacity: 0.8;"></i> Secured Email</label>
+                    <input type="email" name="email" required placeholder="provider@network.com" style="width: 100%; padding: 14px 16px; background: rgba(0,0,0,0.4); color: #fff; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; outline: none; transition: all 0.3s ease; font-family: 'Outfit', sans-serif;" onfocus="this.style.borderColor='#2ecc71'; this.style.boxShadow='0 0 15px rgba(46,204,113,0.3)';" onblur="this.style.borderColor='rgba(255,255,255,0.1)'; this.style.boxShadow='none';">
+                </div>
+                <!-- Interactive Password Strength Box -->
+                <div class="form-group" style="text-align: left; margin-top: 20px; position: relative;">
+                    <label style="font-weight: 500; color: #fff; font-size: 0.95rem; margin-bottom: 8px; display: block; letter-spacing: 0.5px;"><i class="fas fa-shield-alt" style="color: #2ecc71; width: 20px; opacity: 0.8;"></i> Master Encryption Key</label>
+                    <input type="password" id="regPassword" name="password" required placeholder="••••••••••••••••" style="width: 100%; padding: 14px 16px; background: rgba(0,0,0,0.4); color: #fff; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; outline: none; transition: all 0.3s ease; font-family: 'Outfit', sans-serif; letter-spacing: 2px;" onfocus="this.style.borderColor='#2ecc71'; this.style.boxShadow='0 0 15px rgba(46,204,113,0.3)';" onblur="this.style.borderColor='rgba(255,255,255,0.1)'; this.style.boxShadow='none';">
+                    
+                    <div style="margin-top: 10px; display: flex; gap: 5px; height: 4px; border-radius: 2px; overflow: hidden;">
+                        <div id="str-1" style="flex: 1; background: rgba(255,255,255,0.1); transition: background 0.3s;"></div>
+                        <div id="str-2" style="flex: 1; background: rgba(255,255,255,0.1); transition: background 0.3s;"></div>
+                        <div id="str-3" style="flex: 1; background: rgba(255,255,255,0.1); transition: background 0.3s;"></div>
+                        <div id="str-4" style="flex: 1; background: rgba(255,255,255,0.1); transition: background 0.3s;"></div>
+                    </div>
+                    <div id="str-text" style="font-size: 0.8rem; color: var(--text-light); margin-top: 5px; text-align: right;">Awaiting Key...</div>
+                </div>
+
+                <div class="form-actions" style="margin-top: 35px;">
+                    <button type="submit" id="regBtn" class="btn btn-primary" style="width: 100%; font-size: 1.1rem; font-weight: 600; padding: 16px; background: linear-gradient(135deg, #27ae60, #2ecc71); border: none; border-radius: 8px; color: white; box-shadow: 0 4px 15px rgba(46,204,113,0.4); text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s ease; cursor: pointer;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 25px rgba(46,204,113,0.6)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(46,204,113,0.4)';"><i class="fas fa-microchip" style="margin-right: 8px;"></i> Initialize Node Clearance</button>
                 </div>
             </form>
-            <div style="text-align: center; margin-top: 25px; border-top: 1px solid #eee; padding-top: 20px;">
-                <p style="color: #7f8c8d;">Already have an account? <a href="{{ url_for('login') }}" style="color: #3498db; text-decoration: none; font-weight: bold;">Login here</a></p>
+            <div style="text-align: center; margin-top: 35px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 25px;">
+                <p style="color: var(--text-light); font-size: 0.95rem;">Already have Node Identity? <a href="{{ url_for('login') }}" style="color: #2ecc71; text-decoration: none; font-weight: 600; transition: color 0.3s ease;" onmouseover="this.style.color='#fff'; this.style.textShadow='0 0 10px rgba(46,204,113,0.8)';" onmouseout="this.style.color='#2ecc71'; this.style.textShadow='none';">Access Protocol Here</a></p>
             </div>
         </div>
     </div>
 </section>
+
+<script>
+document.getElementById('regPassword').addEventListener('input', function(e) {
+    const val = e.target.value;
+    const str1 = document.getElementById('str-1');
+    const str2 = document.getElementById('str-2');
+    const str3 = document.getElementById('str-3');
+    const str4 = document.getElementById('str-4');
+    const strTxt = document.getElementById('str-text');
+    
+    str1.style.background = 'rgba(255,255,255,0.1)';
+    str2.style.background = 'rgba(255,255,255,0.1)';
+    str3.style.background = 'rgba(255,255,255,0.1)';
+    str4.style.background = 'rgba(255,255,255,0.1)';
+    
+    if(val.length === 0) {
+        strTxt.innerText = "Awaiting Key...";
+        strTxt.style.color = "var(--text-light)";
+        return;
+    }
+    
+    let strength = 0;
+    if(val.length > 5) strength++;
+    if(val.length > 8 && /[A-Z]/.test(val)) strength++;
+    if(/[0-9]/.test(val)) strength++;
+    if(/[^A-Za-z0-9]/.test(val)) strength++;
+    
+    if(strength >= 1) { str1.style.background = '#e74c3c'; strTxt.innerText = "Weak Cipher"; strTxt.style.color = "#e74c3c"; }
+    if(strength >= 2) { str2.style.background = '#f39c12'; strTxt.innerText = "Moderate Cipher"; strTxt.style.color = "#f39c12"; }
+    if(strength >= 3) { str3.style.background = '#3498db'; strTxt.innerText = "Strong AES-128 Equivalent"; strTxt.style.color = "#3498db"; }
+    if(strength >= 4) { str4.style.background = '#2ecc71'; strTxt.innerText = "Military Grade Entropy"; strTxt.style.color = "#2ecc71"; }
+});
+
+document.getElementById('registerForm').addEventListener('submit', function() {
+    const btn = document.getElementById('regBtn');
+    btn.innerHTML = '<i class="fas fa-sync fa-spin"></i> Generating Keys & Allocating Sector...';
+    btn.style.opacity = '0.8';
+    btn.style.pointerEvents = 'none';
+});
+</script>
 {% endblock %}

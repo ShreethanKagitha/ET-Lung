@@ -235,7 +235,6 @@ def predict():
             )
             db.session.add(new_pred)
             db.session.commit()
-
         return jsonify({
             'success': True,
             'prediction': result,
@@ -253,7 +252,30 @@ def predict():
     except Exception as e:
         return jsonify({
             'error': str(e)
-        }), 400
+        }), 500
+
+@app.route('/api/preventive-guide', methods=['POST'])
+def preventive_guide():
+    try:
+        data = request.get_json()
+        patient_data = {
+            'age': float(data.get('age', 0)),
+            'gender': data.get('gender', 'Unknown'),
+            'pack_years': float(data.get('pack_years', 0)),
+            'radon_exposure': data.get('radon_exposure', 'Unknown'),
+            'asbestos_exposure': data.get('asbestos_exposure', 'Unknown'),
+            'secondhand_smoke_exposure': data.get('secondhand_smoke_exposure', 'Unknown'),
+            'copd_diagnosis': data.get('copd_diagnosis', 'Unknown'),
+            'alcohol_consumption': data.get('alcohol_consumption', 'Unknown'),
+            'family_history': data.get('family_history', 'Unknown')
+        }
+        risk_level = data.get('risk_level', 'Unknown')
+        
+        guide_html = genai_service.generate_preventive_guide(patient_data, risk_level)
+        return jsonify({'success': True, 'guide_html': guide_html})
+    except Exception as e:
+        print(f"Preventive Guide Error: {e}")
+        return jsonify({'success': False, 'error': str(e)}), 500
 
 def generate_prediction_chart(probability, result):
     """Generate base64 encoded chart for prediction result"""
@@ -359,6 +381,22 @@ def parse_voice():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+@app.route('/api/analyze-scan', methods=['POST'])
+def analyze_scan():
+    """Endpoint for Vision API analysis of uploaded Chest X-Rays or CT Scans"""
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file uploaded in request'}), 400
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({'error': 'No selected file'}), 400
+        
+    try:
+        img_bytes = file.read()
+        analysis = genai_service.analyze_medical_scan(img_bytes)
+        return jsonify(analysis)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 if __name__ == '__main__':
     print("\n" + "="*60)
     print("🏥 LUNG CANCER PREDICTION WEB APPLICATION")
@@ -366,4 +404,5 @@ if __name__ == '__main__':
     print("Starting Flask server...")
     print("Access the application at: http://127.0.0.1:5001")
     print("="*60 + "\n")
-    app.run(debug=True, host='0.0.0.0', port=5001)
+    # Start the application with multi-threading enabled to prevent GenAI API blocking!
+    app.run(debug=True, host='0.0.0.0', port=5001, threaded=True)

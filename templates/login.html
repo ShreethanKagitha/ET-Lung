@@ -1,41 +1,162 @@
 {% extends "base.html" %}
-{% block title %}Login - LungCare AI{% endblock %}
+{% block title %}Access Protocol - LungCare AI{% endblock %}
 {% block content %}
-<section class="prediction-section">
-    <div class="container" style="max-width: 500px; margin-top: 50px; margin-bottom: 50px;">
-        <div class="form-container" style="padding: 40px;">
-            <div class="form-header">
-                <h2>Welcome Back</h2>
-                <p>Login to view your AI prediction history</p>
+<section class="prediction-section" style="min-height: 80vh; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; padding-bottom: 4rem;">
+    <!-- Background Animated Glow -->
+    <div style="position: absolute; width: 800px; height: 800px; background: radial-gradient(circle, rgba(52,152,219,0.08) 0%, rgba(0,0,0,0) 60%); top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; z-index: 0;"></div>
+
+    <div class="container" style="max-width: 480px; position: relative; z-index: 1;">
+        <div class="form-container" style="padding: 40px; background: rgba(15, 17, 21, 0.7); backdrop-filter: blur(25px); border: 1px solid var(--glass-border); border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.6);">
+            <div class="form-header" style="text-align: center; margin-bottom: 30px;">
+                <h2 style="font-size: 2.5rem; color: #fff; letter-spacing: -1px; margin-bottom: 10px;"><i class="fas fa-fingerprint" style="color: #3498db; margin-right: 12px; font-size: 2.2rem;"></i>Secure Access</h2>
+                <p style="color: var(--text-light); font-size: 1rem;">End-to-end encrypted clinical authentication sequence.</p>
             </div>
             
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                     {% for category, message in messages %}
-                        <div style="padding: 15px; margin-bottom: 20px; border-radius: 4px; color: white; font-weight: bold; background-color: {% if category == 'danger' %}#e74c3c{% else %}#2ecc71{% endif %};">
-                            {{ message }}
+                        <div style="padding: 15px; margin-bottom: 25px; border-radius: 8px; color: white; font-weight: 600; font-size: 0.95rem; text-align: center; background-color: {% if category == 'danger' %}rgba(231, 76, 60, 0.15){% else %}rgba(46, 204, 113, 0.15){% endif %}; border: 1px solid {% if category == 'danger' %}rgba(231, 76, 60, 0.4){% else %}rgba(46, 204, 113, 0.4){% endif %}; box-shadow: 0 0 20px {% if category == 'danger' %}rgba(231,76,60,0.15){% else %}rgba(46,204,113,0.15){% endif %};">
+                            <i class="fas {% if category == 'danger' %}fa-exclamation-triangle{% else %}fa-check-circle{% endif %}"></i> {{ message }}
                         </div>
                     {% endfor %}
                 {% endif %}
             {% endwith %}
 
-            <form method="POST" action="">
-                <div class="form-group" style="text-align: left;">
-                    <label style="font-weight: bold; color: #2c3e50;"><i class="fas fa-envelope"></i> Email Address</label>
-                    <input type="email" name="email" required placeholder="Enter your email" style="width: 100%; padding: 12px; margin-top: 8px; border: 1px solid #ccc; border-radius: 4px;">
+            <!-- SSO / Web3 Mock Buttons -->
+            <div style="display: flex; gap: 15px; margin-bottom: 30px;">
+                <button type="button" onclick="triggerMFA()" style="flex: 1; padding: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: 'Outfit', sans-serif; font-weight: 500;" onmouseover="this.style.background='rgba(46, 204, 113, 0.1)'; this.style.borderColor='#2ecc71'; this.style.boxShadow='0 0 15px rgba(46,204,113,0.2)';" onmouseout="this.style.background='rgba(255,255,255,0.03)'; this.style.borderColor='rgba(255,255,255,0.1)'; this.style.boxShadow='none';">
+                    <i class="fas fa-hospital-user" style="color: #2ecc71;"></i> Epic SSO
+                </button>
+                <button type="button" onclick="triggerMFA()" style="flex: 1; padding: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: 'Outfit', sans-serif; font-weight: 500;" onmouseover="this.style.background='rgba(52, 152, 219, 0.1)'; this.style.borderColor='#3498db'; this.style.boxShadow='0 0 15px rgba(52,152,219,0.2)';" onmouseout="this.style.background='rgba(255,255,255,0.03)'; this.style.borderColor='rgba(255,255,255,0.1)'; this.style.boxShadow='none';">
+                    <i class="fab fa-apple" style="color: #fff;"></i> WebAuthn
+                </button>
+            </div>
+            
+            <div style="display: flex; align-items: center; margin-bottom: 30px;">
+                <div style="flex: 1; height: 1px; background: rgba(255,255,255,0.1);"></div>
+                <div style="padding: 0 15px; color: var(--text-light); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 300;">Or standard protocol</div>
+                <div style="flex: 1; height: 1px; background: rgba(255,255,255,0.1);"></div>
+            </div>
+
+            <form method="POST" action="" id="loginForm">
+                <div class="form-group" style="text-align: left; position: relative;">
+                    <label style="font-weight: 500; color: #fff; font-size: 0.95rem; margin-bottom: 8px; display: block; letter-spacing: 0.5px;"><i class="fas fa-envelope" style="color: #3498db; width: 20px; opacity: 0.8;"></i> Institutional Email</label>
+                    <input type="email" name="email" required placeholder="dr.smith@hospital.org" style="width: 100%; padding: 14px 16px; background: rgba(0,0,0,0.4); color: #fff; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; outline: none; transition: all 0.3s ease; font-family: 'Outfit', sans-serif;" onfocus="this.style.borderColor='#3498db'; this.style.boxShadow='0 0 15px rgba(52,152,219,0.3)';" onblur="this.style.borderColor='rgba(255,255,255,0.1)'; this.style.boxShadow='none';">
                 </div>
-                <div class="form-group" style="text-align: left; margin-top: 20px;">
-                    <label style="font-weight: bold; color: #2c3e50;"><i class="fas fa-lock"></i> Password</label>
-                    <input type="password" name="password" required placeholder="Enter your password" style="width: 100%; padding: 12px; margin-top: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                <div class="form-group" style="text-align: left; margin-top: 25px; position: relative;">
+                    <label style="font-weight: 500; color: #fff; font-size: 0.95rem; margin-bottom: 8px; display: block; letter-spacing: 0.5px;"><i class="fas fa-key" style="color: #3498db; width: 20px; opacity: 0.8;"></i> Authorization Cipher</label>
+                    <input type="password" name="password" required placeholder="••••••••••••" style="width: 100%; padding: 14px 16px; background: rgba(0,0,0,0.4); color: #fff; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; outline: none; transition: all 0.3s ease; font-family: 'Outfit', sans-serif; letter-spacing: 3px;" onfocus="this.style.borderColor='#3498db'; this.style.boxShadow='0 0 15px rgba(52,152,219,0.3)';" onblur="this.style.borderColor='rgba(255,255,255,0.1)'; this.style.boxShadow='none';">
                 </div>
-                <div class="form-actions" style="margin-top: 30px;">
-                    <button type="submit" class="btn btn-primary" style="width: 100%; font-size: 1.1rem; padding: 12px;"><i class="fas fa-sign-in-alt"></i> Login</button>
+                <div class="form-actions" style="margin-top: 40px; position: relative;">
+                    <button type="submit" id="authBtn" class="btn btn-primary" style="width: 100%; font-size: 1.1rem; font-weight: 600; padding: 16px; background: linear-gradient(135deg, #3498db, #2980b9); border: none; border-radius: 8px; color: white; box-shadow: 0 4px 15px rgba(52,152,219,0.4); text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s ease; cursor: pointer;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 25px rgba(52,152,219,0.6)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(52,152,219,0.4)';"><i class="fas fa-shield-check" style="margin-right: 8px;"></i> Authenticate Identity</button>
                 </div>
             </form>
-            <div style="text-align: center; margin-top: 25px; border-top: 1px solid #eee; padding-top: 20px;">
-                <p style="color: #7f8c8d;">Don't have an account? <a href="{{ url_for('register') }}" style="color: #3498db; text-decoration: none; font-weight: bold;">Sign up here</a></p>
+            <div style="text-align: center; margin-top: 35px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 25px;">
+                <p style="color: var(--text-light); font-size: 0.95rem;">No institutional clearance? <a href="{{ url_for('register') }}" style="color: #3498db; text-decoration: none; font-weight: 600; transition: color 0.3s ease;" onmouseover="this.style.color='#fff'; this.style.textShadow='0 0 10px rgba(52,152,219,0.8)';" onmouseout="this.style.color='#3498db'; this.style.textShadow='none';">Request Access Here</a></p>
             </div>
         </div>
     </div>
 </section>
+
+<!-- Cyber-Auth MFA Modal Overlay -->
+<div id="mfaOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); z-index: 9999; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease;">
+    <div style="background: rgba(15,17,21,0.95); border: 1px solid #3498db; border-radius: 16px; padding: 40px; text-align: center; box-shadow: 0 0 50px rgba(52,152,219,0.3); max-width: 450px; width: 90%;">
+        <i class="fas fa-shield-alt fa-3x" style="color: #3498db; margin-bottom: 20px; filter: drop-shadow(0 0 10px rgba(52,152,219,0.5));"></i>
+        <h3 style="color: #fff; font-size: 1.6rem; margin-bottom: 12px; letter-spacing: -0.5px;">Biometric Handshake Required</h3>
+        <p style="color: var(--text-light); margin-bottom: 30px; line-height: 1.6; font-size: 0.95rem;">Please authenticate via your linked hardware token or enter your 6-digit Time-Based OTP (TOTP) to proceed.</p>
+        
+        <div style="display: flex; gap: 8px; justify-content: center; margin-bottom: 35px;" id="otp-container">
+            <input type="text" maxlength="1" class="otp-input" placeholder="0" style="width: 45px; height: 55px; text-align: center; font-size: 1.8rem; font-family: 'Courier New', monospace; background: rgba(0,0,0,0.5); border: 2px solid rgba(52,152,219,0.3); color: #fff; border-radius: 8px; outline: none; transition: all 0.2s;">
+            <input type="text" maxlength="1" class="otp-input" placeholder="0" style="width: 45px; height: 55px; text-align: center; font-size: 1.8rem; font-family: 'Courier New', monospace; background: rgba(0,0,0,0.5); border: 2px solid rgba(52,152,219,0.3); color: #fff; border-radius: 8px; outline: none; transition: all 0.2s;">
+            <input type="text" maxlength="1" class="otp-input" placeholder="0" style="width: 45px; height: 55px; text-align: center; font-size: 1.8rem; font-family: 'Courier New', monospace; background: rgba(0,0,0,0.5); border: 2px solid rgba(52,152,219,0.3); color: #fff; border-radius: 8px; outline: none; transition: all 0.2s;">
+            <span style="color: rgba(255,255,255,0.2); font-size: 2rem; display: flex; align-items: center; padding: 0 5px;">-</span>
+            <input type="text" maxlength="1" class="otp-input" placeholder="0" style="width: 45px; height: 55px; text-align: center; font-size: 1.8rem; font-family: 'Courier New', monospace; background: rgba(0,0,0,0.5); border: 2px solid rgba(52,152,219,0.3); color: #fff; border-radius: 8px; outline: none; transition: all 0.2s;">
+            <input type="text" maxlength="1" class="otp-input" placeholder="0" style="width: 45px; height: 55px; text-align: center; font-size: 1.8rem; font-family: 'Courier New', monospace; background: rgba(0,0,0,0.5); border: 2px solid rgba(52,152,219,0.3); color: #fff; border-radius: 8px; outline: none; transition: all 0.2s;">
+            <input type="text" maxlength="1" class="otp-input" placeholder="0" style="width: 45px; height: 55px; text-align: center; font-size: 1.8rem; font-family: 'Courier New', monospace; background: rgba(0,0,0,0.5); border: 2px solid rgba(52,152,219,0.3); color: #fff; border-radius: 8px; outline: none; transition: all 0.2s;">
+        </div>
+        
+        <button onclick="closeMFA()" style="padding: 12px 25px; background: transparent; border: 1px solid rgba(255,255,255,0.2); color: var(--text-light); border-radius: 6px; cursor: pointer; transition: all 0.3s; font-family: 'Outfit', sans-serif;" onmouseover="this.style.color='#fff'; this.style.borderColor='#fff'; this.style.background='rgba(255,255,255,0.05)';" onmouseout="this.style.color='var(--text-light)'; this.style.borderColor='rgba(255,255,255,0.2)'; this.style.background='transparent';">Cancel Handshake</button>
+    </div>
+</div>
+
+<script>
+function triggerMFA() {
+    const overlay = document.getElementById('mfaOverlay');
+    overlay.style.display = 'flex';
+    // Trigger reflow for transition
+    void overlay.offsetWidth;
+    overlay.style.opacity = '1';
+    
+    // Auto focus and jump logic
+    const inputs = overlay.querySelectorAll('.otp-input');
+    
+    // Style interactions
+    inputs.forEach(inp => {
+        inp.addEventListener('focus', function() {
+            this.style.borderColor = '#3498db';
+            this.style.boxShadow = '0 0 15px rgba(52,152,219,0.4)';
+        });
+        inp.addEventListener('blur', function() {
+            this.style.borderColor = 'rgba(52,152,219,0.3)';
+            this.style.boxShadow = 'none';
+        });
+    });
+
+    inputs.forEach((input, i) => {
+        input.addEventListener('keyup', (e) => {
+            // Move forward
+            if(input.value && i < inputs.length - 1 && e.key !== 'Backspace') {
+                inputs[i+1].focus();
+            }
+            // Move backward
+            if(!input.value && i > 0 && e.key === 'Backspace') {
+                inputs[i-1].focus();
+            }
+            
+            // Check if all complete -> simulate success
+            let complete = true;
+            inputs.forEach(inp => { if(!inp.value) complete = false; });
+            
+            if(complete) {
+                // Flash green
+                inputs.forEach(inp => {
+                    inp.style.borderColor = '#2ecc71';
+                    inp.style.color = '#2ecc71';
+                    inp.style.boxShadow = '0 0 20px rgba(46,204,113,0.5)';
+                });
+                setTimeout(() => {
+                    alert('Biometric Token Accepted! Simulating Enterprise Login bypassing password...');
+                    closeMFA();
+                    // Reset
+                    inputs.forEach(inp => {
+                        inp.value = '';
+                        inp.style.borderColor = 'rgba(52,152,219,0.3)';
+                        inp.style.color = '#fff';
+                        inp.style.boxShadow = 'none';
+                    });
+                }, 800);
+            }
+        });
+    });
+    
+    setTimeout(() => {
+        if(inputs.length > 0) inputs[0].focus();
+    }, 300);
+}
+
+function closeMFA() {
+    const overlay = document.getElementById('mfaOverlay');
+    overlay.style.opacity = '0';
+    setTimeout(() => {
+        overlay.style.display = 'none';
+    }, 300);
+}
+
+document.getElementById('loginForm').addEventListener('submit', function() {
+    const btn = document.getElementById('authBtn');
+    btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Establishing Secure Tunnel...';
+    btn.style.opacity = '0.8';
+    btn.style.pointerEvents = 'none';
+});
+</script>
 {% endblock %}

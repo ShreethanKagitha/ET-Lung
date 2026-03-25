@@ -1,130 +1,223 @@
 {% extends "base.html" %}
 
-{% block title %}Analytics - Lung Cancer Prediction System{% endblock %}
+{% block title %}Analytics - LungCare AI Inference Platform{% endblock %}
+
+{% block extra_css %}
+<!-- Leaflet CSS & JS for Heatmap -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
+{% endblock %}
 
 {% block content %}
 <!-- Page Header -->
-<section class="page-header">
+<section class="page-header" style="padding: 12rem 0 4rem; text-align: center;">
     <div class="container">
-        <h1><i class="fas fa-chart-bar"></i> Model Analytics & Performance</h1>
-        <p>Comprehensive visualization of machine learning model performance</p>
+        <h1 style="font-size: 4rem; letter-spacing: -2px; margin-bottom: 1rem;"><i class="fas fa-chart-network" style="color: var(--primary-color); opacity: 0.8; margin-right: 15px;"></i>Performance Telemetry</h1>
+        <p style="font-size: 1.25rem; opacity: 0.7; font-weight: 300;">Real-time diagnostics tracking and ensemble predictive scoring matrices.</p>
     </div>
 </section>
 
 <!-- Model Performance Section -->
-<section class="analytics-section">
+<section class="analytics-section" style="padding: 5rem 0;">
     <div class="container">
-        <div class="analytics-header">
-            <h2>Machine Learning Models Comparison</h2>
-            <p>Performance metrics of 8 different algorithms</p>
+        <div class="analytics-header" style="text-align: center; margin-bottom: 5rem;">
+            <h2 style="font-size: 2.8rem; letter-spacing: -1px;">Algorithm Benchmarks</h2>
+            <p style="font-size: 1.15rem; color: var(--text-light); margin-top: 1rem;">Comparative analysis across 8 computational topologies</p>
         </div>
         
         <!-- Model Cards -->
-        <div class="model-grid">
+        <div class="model-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem;">
             {% if models_data %}
                 {% for model in models_data %}
-                <div class="model-card">
-                    <div class="model-header">
-                        <h3>{{ model.Model }}</h3>
+                <div class="model-card" style="background: rgba(255,255,255,0.02); backdrop-filter: blur(16px); border-radius: 16px; border: 1px solid var(--glass-border); padding: 2.5rem; transition: transform 0.3s ease;">
+                    <div class="model-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--glass-border);">
+                        <h3 style="font-size: 1.4rem; color: #fff;">{{ model.Model }}</h3>
                         {% if loop.index == 1 %}
-                        <span class="best-badge">
-                            <i class="fas fa-trophy"></i> Best
-                        </span>
+                        <span class="best-badge" style="background: rgba(46, 204, 113, 0.1); color: var(--success-color); padding: 0.4rem 1rem; border-radius: 20px; font-size: 0.85rem; font-weight: 600; border: 1px solid var(--success-color);"><i class="fas fa-microchip"></i> Prime</span>
                         {% endif %}
                     </div>
                     <div class="model-metrics">
-                        <div class="metric">
-                            <span class="metric-label">Accuracy</span>
-                            <div class="metric-bar">
-                                <div class="metric-fill" style="width: {{ model.Accuracy * 100 }}%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+                        <!-- Accuracy -->
+                        <div class="metric" style="margin-bottom: 1.5rem;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <span style="color: var(--text-light); font-size: 0.9rem; text-transform: uppercase;">Accuracy</span>
+                                <span style="color: #fff; font-weight: 600; font-size: 0.95rem;">{{ "%.2f"|format(model.Accuracy * 100) }}%</span>
                             </div>
-                            <span class="metric-value">{{ "%.2f"|format(model.Accuracy * 100) }}%</span>
+                            <div class="metric-bar" style="height: 6px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden;">
+                                <div class="metric-fill" style="height: 100%; width: {{ model.Accuracy * 100 }}%; background: var(--primary-color); border-radius: 10px; box-shadow: 0 0 10px var(--primary-color);"></div>
+                            </div>
                         </div>
                         
-                        <div class="metric">
-                            <span class="metric-label">Precision</span>
-                            <div class="metric-bar">
-                                <div class="metric-fill" style="width: {{ model.Precision * 100 }}%; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div>
+                        <!-- Precision -->
+                        <div class="metric" style="margin-bottom: 1.5rem;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <span style="color: var(--text-light); font-size: 0.9rem; text-transform: uppercase;">Precision</span>
+                                <span style="color: #fff; font-weight: 600; font-size: 0.95rem;">{{ "%.2f"|format(model.Precision * 100) }}%</span>
                             </div>
-                            <span class="metric-value">{{ "%.2f"|format(model.Precision * 100) }}%</span>
+                            <div class="metric-bar" style="height: 6px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden;">
+                                <div class="metric-fill" style="height: 100%; width: {{ model.Precision * 100 }}%; background: var(--accent-color); border-radius: 10px; box-shadow: 0 0 10px var(--accent-color);"></div>
+                            </div>
                         </div>
                         
-                        <div class="metric">
-                            <span class="metric-label">Recall</span>
-                            <div class="metric-bar">
-                                <div class="metric-fill" style="width: {{ model.Recall * 100 }}%; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);"></div>
+                        <!-- Recall -->
+                        <div class="metric" style="margin-bottom: 1.5rem;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <span style="color: var(--text-light); font-size: 0.9rem; text-transform: uppercase;">Recall</span>
+                                <span style="color: #fff; font-weight: 600; font-size: 0.95rem;">{{ "%.2f"|format(model.Recall * 100) }}%</span>
                             </div>
-                            <span class="metric-value">{{ "%.2f"|format(model.Recall * 100) }}%</span>
+                            <div class="metric-bar" style="height: 6px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden;">
+                                <div class="metric-fill" style="height: 100%; width: {{ model.Recall * 100 }}%; background: #4facfe; border-radius: 10px; box-shadow: 0 0 10px #4facfe;"></div>
+                            </div>
                         </div>
                         
+                        <!-- F1-Score -->
                         <div class="metric">
-                            <span class="metric-label">F1-Score</span>
-                            <div class="metric-bar">
-                                <div class="metric-fill" style="width: {{ model['F1-Score'] * 100 }}%; background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);"></div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <span style="color: var(--text-light); font-size: 0.9rem; text-transform: uppercase;">F1-Score</span>
+                                <span style="color: #fff; font-weight: 600; font-size: 0.95rem;">{{ "%.2f"|format(model['F1-Score'] * 100) }}%</span>
                             </div>
-                            <span class="metric-value">{{ "%.2f"|format(model['F1-Score'] * 100) }}%</span>
+                            <div class="metric-bar" style="height: 6px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden;">
+                                <div class="metric-fill" style="height: 100%; width: {{ model['F1-Score'] * 100 }}%; background: #43e97b; border-radius: 10px; box-shadow: 0 0 10px #43e97b;"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 {% endfor %}
             {% else %}
-                <div class="no-data">
-                    <i class="fas fa-chart-line"></i>
-                    <p>Model performance data will be displayed here after training</p>
+                <div class="no-data" style="grid-column: 1 / -1; text-align: center; padding: 5rem; background: rgba(255,255,255,0.02); border: 1px dashed var(--glass-border); border-radius: 20px;">
+                    <i class="fas fa-server" style="font-size: 4rem; color: var(--text-light); opacity: 0.5; margin-bottom: 2rem;"></i>
+                    <p style="font-size: 1.3rem; color: var(--text-light);">Telemetry feeds offline. Analytics will populate post-training inference initialization.</p>
                 </div>
             {% endif %}
         </div>
     </div>
 </section>
 
-<!-- Visualization Gallery -->
-<section class="visualization-gallery">
+<!-- GLOBAL EPIDEMIOLOGICAL HEATMAP -->
+<section class="epidemiology-map" style="padding: 6rem 0; background: rgba(0,0,0,0.3); border-top: 1px solid var(--glass-border);">
     <div class="container">
-        <h2>Performance Visualizations</h2>
+        <div class="section-header" style="text-align: center; margin-bottom: 4rem;">
+            <h2 style="font-size: 3rem; letter-spacing: -1px; color: #fff;"><i class="fas fa-globe-americas" style="color: #3498db; margin-right: 15px;"></i> Epidemiological Risk Heatmap</h2>
+            <p style="font-size: 1.2rem; color: var(--text-light); margin-top: 1rem;">Live geospatial tracking of Radon exposure zones and historic Asbestos industrial corridors across mapped populations.</p>
+            <div style="display: flex; justify-content: center; gap: 20px; margin-top: 20px;">
+                <span style="background: rgba(46, 204, 113, 0.2); border: 1px solid var(--success-color); padding: 5px 15px; border-radius: 20px; font-size: 0.9rem; color: var(--success-color);"><i class="fas fa-circle"></i> Low Environmental Risk</span>
+                <span style="background: rgba(231, 76, 60, 0.2); border: 1px solid var(--danger-color); padding: 5px 15px; border-radius: 20px; font-size: 0.9rem; color: var(--danger-color);"><i class="fas fa-circle"></i> Critical Endemic Zones</span>
+            </div>
+        </div>
+
+        <div style="background: rgba(255,255,255,0.02); backdrop-filter: blur(12px); border-radius: 16px; border: 1px solid var(--glass-border); padding: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.5);">
+            <div id="riskMap" style="height: 500px; border-radius: 12px; background: #0f1115; z-index: 1;"></div>
+        </div>
+    </div>
+</section>
+
+<!-- Visualization Gallery -->
+<section class="visualization-gallery" style="padding: 8rem 0; background: rgba(255,255,255,0.01); border-top: 1px solid var(--glass-border);">
+    <div class="container">
+        <h2 style="font-size: 2.8rem; letter-spacing: -1px; text-align: center; margin-bottom: 5rem;">Diagnostic Neural Mapping</h2>
         
-        <div class="viz-grid">
-            <div class="viz-card">
-                <img src="{{ url_for('static', filename='visualizations/model_comparison_visualization.png') }}" 
-                     alt="Model Comparison" onerror="this.src='https://via.placeholder.com/600x400?text=Model+Comparison'">
-                <h3>Model Comparison</h3>
-                <p>Comprehensive comparison of all metrics across models</p>
+        <div class="viz-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 3rem;">
+            
+            <div class="viz-card" style="background: rgba(255,255,255,0.02); backdrop-filter: blur(12px); border-radius: 16px; border: 1px solid var(--glass-border); overflow: hidden; transition: transform 0.3s ease;">
+                <img src="{{ url_for('static', filename='visualizations/model_comparison_visualization.png') }}" alt="Model Comparison" onerror="this.src='https://via.placeholder.com/600x400/0f1115/ffffff?text=No+Data+Found'" style="width: 100%; height: auto; border-bottom: 1px solid var(--glass-border); filter: saturate(1.2);">
+                <div style="padding: 2rem;">
+                    <h3 style="color: #fff; margin-bottom: 0.5rem; font-size: 1.3rem;"><i class="fas fa-layer-group" style="color: var(--primary-color);"></i> Ensemble Comparison</h3>
+                    <p style="color: var(--text-light); font-size: 0.95rem;">Macro-level assessment across distinct model typologies.</p>
+                </div>
             </div>
             
-            <div class="viz-card">
-                <img src="{{ url_for('static', filename='visualizations/confusion_matrices.png') }}" 
-                     alt="Confusion Matrices" onerror="this.src='https://via.placeholder.com/600x400?text=Confusion+Matrices'">
-                <h3>Confusion Matrices</h3>
-                <p>True positive, false positive analysis for each model</p>
+            <div class="viz-card" style="background: rgba(255,255,255,0.02); backdrop-filter: blur(12px); border-radius: 16px; border: 1px solid var(--glass-border); overflow: hidden; transition: transform 0.3s ease;">
+                <img src="{{ url_for('static', filename='visualizations/confusion_matrices.png') }}" alt="Confusion Matrices" onerror="this.src='https://via.placeholder.com/600x400/0f1115/ffffff?text=No+Data+Found'" style="width: 100%; height: auto; border-bottom: 1px solid var(--glass-border); filter: saturate(1.2);">
+                <div style="padding: 2rem;">
+                    <h3 style="color: #fff; margin-bottom: 0.5rem; font-size: 1.3rem;"><i class="fas fa-border-all" style="color: var(--primary-color);"></i> Confusion Matrices</h3>
+                    <p style="color: var(--text-light); font-size: 0.95rem;">Granular true-positive and false-negative topological mappings.</p>
+                </div>
             </div>
             
-            <div class="viz-card">
-                <img src="{{ url_for('static', filename='visualizations/roc_curves.png') }}" 
-                     alt="ROC Curves" onerror="this.src='https://via.placeholder.com/600x400?text=ROC+Curves'">
-                <h3>ROC Curves</h3>
-                <p>Receiver Operating Characteristic curves showing model performance</p>
+            <div class="viz-card" style="background: rgba(255,255,255,0.02); backdrop-filter: blur(12px); border-radius: 16px; border: 1px solid var(--glass-border); overflow: hidden; transition: transform 0.3s ease;">
+                <img src="{{ url_for('static', filename='visualizations/roc_curves.png') }}" alt="ROC Curves" onerror="this.src='https://via.placeholder.com/600x400/0f1115/ffffff?text=No+Data+Found'" style="width: 100%; height: auto; border-bottom: 1px solid var(--glass-border); filter: saturate(1.2);">
+                <div style="padding: 2rem;">
+                    <h3 style="color: #fff; margin-bottom: 0.5rem; font-size: 1.3rem;"><i class="fas fa-chart-area" style="color: var(--primary-color);"></i> ROC Probabilities</h3>
+                    <p style="color: var(--text-light); font-size: 0.95rem;">Receiver Operating Characteristic area optimization rates.</p>
+                </div>
             </div>
             
-            <div class="viz-card">
-                <img src="{{ url_for('static', filename='visualizations/feature_importance.png') }}" 
-                     alt="Feature Importance" onerror="this.src='https://via.placeholder.com/600x400?text=Feature+Importance'">
-                <h3>Feature Importance</h3>
-                <p>Most influential features in predicting lung cancer</p>
+            <div class="viz-card" style="background: rgba(255,255,255,0.02); backdrop-filter: blur(12px); border-radius: 16px; border: 1px solid var(--glass-border); overflow: hidden; transition: transform 0.3s ease;">
+                <img src="{{ url_for('static', filename='visualizations/feature_importance.png') }}" alt="Feature Importance" onerror="this.src='https://via.placeholder.com/600x400/0f1115/ffffff?text=No+Data+Found'" style="width: 100%; height: auto; border-bottom: 1px solid var(--glass-border); filter: saturate(1.2);">
+                <div style="padding: 2rem;">
+                    <h3 style="color: #fff; margin-bottom: 0.5rem; font-size: 1.3rem;"><i class="fas fa-fingerprint" style="color: var(--primary-color);"></i> Vector Importance</h3>
+                    <p style="color: var(--text-light); font-size: 0.95rem;">Impact variables strictly determining final classification nodes.</p>
+                </div>
             </div>
             
-            <div class="viz-card">
-                <img src="{{ url_for('static', filename='visualizations/correlation_heatmap.png') }}" 
-                     alt="Correlation Heatmap" onerror="this.src='https://via.placeholder.com/600x400?text=Correlation+Heatmap'">
-                <h3>Correlation Heatmap</h3>
-                <p>Relationships between different features</p>
+            <div class="viz-card" style="background: rgba(255,255,255,0.02); backdrop-filter: blur(12px); border-radius: 16px; border: 1px solid var(--glass-border); overflow: hidden; transition: transform 0.3s ease;">
+                <img src="{{ url_for('static', filename='visualizations/correlation_heatmap.png') }}" alt="Correlation Heatmap" onerror="this.src='https://via.placeholder.com/600x400/0f1115/ffffff?text=No+Data+Found'" style="width: 100%; height: auto; border-bottom: 1px solid var(--glass-border); filter: saturate(1.2);">
+                <div style="padding: 2rem;">
+                    <h3 style="color: #fff; margin-bottom: 0.5rem; font-size: 1.3rem;"><i class="fas fa-fire-alt" style="color: var(--primary-color);"></i> Correlation Heatmap</h3>
+                    <p style="color: var(--text-light); font-size: 0.95rem;">Cross-variable dependencies embedded within the training matrix.</p>
+                </div>
             </div>
             
-            <div class="viz-card">
-                <img src="{{ url_for('static', filename='visualizations/target_distribution.png') }}" 
-                     alt="Target Distribution" onerror="this.src='https://via.placeholder.com/600x400?text=Target+Distribution'">
-                <h3>Target Distribution</h3>
-                <p>Distribution of cancer vs non-cancer cases in dataset</p>
+            <div class="viz-card" style="background: rgba(255,255,255,0.02); backdrop-filter: blur(12px); border-radius: 16px; border: 1px solid var(--glass-border); overflow: hidden; transition: transform 0.3s ease;">
+                <img src="{{ url_for('static', filename='visualizations/target_distribution.png') }}" alt="Target Distribution" onerror="this.src='https://via.placeholder.com/600x400/0f1115/ffffff?text=No+Data+Found'" style="width: 100%; height: auto; border-bottom: 1px solid var(--glass-border); filter: saturate(1.2);">
+                <div style="padding: 2rem;">
+                    <h3 style="color: #fff; margin-bottom: 0.5rem; font-size: 1.3rem;"><i class="fas fa-dna" style="color: var(--primary-color);"></i> Target Distribution</h3>
+                    <p style="color: var(--text-light); font-size: 0.95rem;">Analysis of outcome stratification amongst pre-trained patients.</p>
+                </div>
             </div>
         </div>
     </div>
 </section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize Map centered on US
+        var map = L.map('riskMap').setView([39.8283, -98.5795], 4);
+        
+        // CartoDB Dark Matter tile layer for cyberpunk aesthetic
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            subdomains: 'abcd',
+            maxZoom: 20
+        }).addTo(map);
+
+        // Mock Geo-location points for Heatmap (Lat, Lng, Intensity)
+        // High risk (Appalachia, Rust Belt), Medium risk (PNW, etc)
+        var heatPoints = [
+            [41.2033, -77.1945, 0.9], [40.7128, -74.0060, 0.8], [39.9526, -75.1652, 0.85],
+            [40.4406, -79.9959, 1.0], [41.4993, -81.6944, 0.9], [42.3314, -83.0458, 0.95],
+            [41.8781, -87.6298, 0.7], [38.6270, -90.1994, 0.8], [39.1031, -84.5120, 0.85],
+            [47.6062, -122.3321, 0.5], [45.5152, -122.6784, 0.4], [37.7749, -122.4194, 0.3],
+            [34.0522, -118.2437, 0.6], [33.4484, -112.0740, 0.3], [32.7767, -96.7970, 0.5]
+        ];
+
+        // Add 200 random points around these clusters to make it look realistic
+        var expandedPoints = [];
+        heatPoints.forEach(point => {
+            for(let i=0; i<30; i++) {
+                expandedPoints.push([
+                    point[0] + (Math.random() - 0.5) * 5,
+                    point[1] + (Math.random() - 0.5) * 5,
+                    point[2] * Math.random()
+                ]);
+            }
+        });
+
+        if (typeof L.heatLayer !== 'undefined') {
+            var heat = L.heatLayer(expandedPoints, {
+                radius: 25,
+                blur: 15,
+                maxZoom: 10,
+                max: 1.0,
+                gradient: {
+                    0.2: '#2ecc71', // Safe/Low
+                    0.5: '#f39c12', // Medium
+                    0.8: '#e74c3c', // High
+                    1.0: '#ff0000'  // Critical
+                }
+            }).addTo(map);
+        }
+    });
+</script>
 {% endblock %}

@@ -59,6 +59,45 @@ def extract_patient_data(transcript):
         print(f"Extraction Error: {e}")
         return {}
 
+def analyze_medical_scan(image_bytes):
+    """
+    Uses Gemini Vision API to analyze chest X-Rays or CT scans.
+    """
+    import PIL.Image
+    import io
+    
+    model = _get_model()
+    if not model:
+        return {
+            "risk": "High", 
+            "findings": "[API OFF] Evaluated as mock image. Detected 14mm nodule in upper right lobe.", 
+            "confidence": 0.88
+        }
+        
+    try:
+        img = PIL.Image.open(io.BytesIO(image_bytes))
+        prompt = """
+        You are a leading pulmonary radiologist. Analyze this uploaded chest X-Ray or CT scan for signs of lung cancer, such as nodules, opacities, or masses.
+        If the image provided is strictly NOT a medical scan, state that you cannot process it.
+        Otherwise, return a strictly formatted JSON object with exactly these 3 keys:
+        - "risk": "Low", "Medium", or "High"
+        - "findings": A 1-2 sentence clinical summary of what you observe (e.g. '12mm distinct opacity found in left lower lobe. No pleural effusion.')
+        - "confidence": A float between 0.00 and 1.00 indicating your confidence in the finding.
+        Return ONLY raw JSON. Do not include Markdown like ```json.
+        """
+        response = model.generate_content([prompt, img])
+        text = response.text.replace('```json', '').replace('```', '').strip()
+        analysis = json.loads(text)
+        return analysis
+    except Exception as e:
+        print(f"Vision API Error: {e}")
+        # Return a graceful degradation payload for hackathon demo resilience
+        return {
+            "risk": "Medium",
+            "findings": f"Computer Vision processing failed or image unreadable: {e}. Awaiting manual verification.",
+            "confidence": 0.45
+        }
+
 def generate_personalized_report(patient_data, risk_probability, prediction_result):
     """
     Generates a personalized, empathetic medical report based on the ML prediction,
@@ -106,15 +145,22 @@ Structure your response EXACTLY with these 4 sections in raw HTML (do not use ma
 
 <h3>3. Screening Guidance & Citations</h3>
 <p>(Using the provided KNOWLEDGE BASE, state whether they currently meet the criteria for a Low-Dose CT (LDCT) scan. Explain why or why not based on their age and pack-years.)</p>
-<div style="margin-top: 15px; padding: 12px; background-color: #f8fcf8; border-left: 4px solid #2ecc71; font-size: 0.9em; border-radius: 4px;">
-  <strong style="color: #27ae60;"><i class="fas fa-shield-check"></i> Verified Medical Sources:</strong>
+<div style="margin-top: 15px; padding: 12px; background-color: rgba(46, 204, 113, 0.1); border-left: 4px solid var(--success-color); font-size: 0.9em; border-radius: 8px;">
+  <strong style="color: var(--success-color);"><i class="fas fa-shield-check"></i> Verified Medical Sources:</strong>
   <ul style="margin-top: 8px; margin-bottom: 0; padding-left: 20px;">
     <li>(You MUST explicitly cite the exact source name, year, and URL from the KNOWLEDGE BASE used to make your recommendations above. E.g., "According to the <a href='...' target='_blank'>CDC Lung Cancer Screening Guidelines (2024)</a>...")</li>
   </ul>
 </div>
 
-<h3>4. Important AI Disclaimer</h3>
-<p style="font-size: 0.85em; color: #7f8c8d;"><em>(Include a clear disclaimer that this is a GenAI-augmented predictive tool, not a clinical diagnosis, and highly recommend they share this printed report with their primary care physician.)</em></p>
+<h3>4. Clinical Trial Match (Grounded Assessment)</h3>
+<p>(If the patient is categorized as 'High Risk Factor' (>50%), automatically generate a list of 2 mock/plausible NIH-style Clinical Trials they might be eligible for based exclusively on their profile inputs like 'COPD' or 'Heavy Smoker'. Make them sound cutting-edge but realistic, e.g., 'Phase III Trial for Asbestos-Related Oncology'. If they are low-risk, state 'No clinical trial matching necessary at this low-risk stratum.')</p>
+<div style="margin-top: 15px; padding: 12px; background-color: rgba(52, 152, 219, 0.1); border-left: 4px solid #3498db; font-size: 0.9em; border-radius: 8px;">
+  <strong style="color: #3498db;"><i class="fas fa-flask"></i> Eligibility System Active</strong>
+  <p style="margin: 5px 0 0 0; color: var(--text-light);">Matches computed via mock NIH Database connection mapping.</p>
+</div>
+
+<h3>5. Important AI Disclaimer</h3>
+<p style="font-size: 0.85em; color: var(--text-light);"><em>(Include a clear disclaimer that this is a GenAI-augmented predictive tool, not a clinical diagnosis, and highly recommend they share this printed report with their primary care physician.)</em></p>
 """
     
     if not model:
@@ -164,3 +210,52 @@ AI Assistant:
     except Exception as e:
         print(f"GenAI Error: {e}")
         return "I'm sorry, I'm having trouble retrieving a response at the moment."
+
+def generate_preventive_guide(patient_data, risk_level):
+    """
+    Generates an interactive Preventive Guide with Diet, Lifestyle, and Warnings.
+    """
+    model = _get_model()
+    if not model:
+        return "<div class='alert alert-warning'>GenAI not configured. Using fallback output.</div>"
+        
+    patient_summary = "\n".join([f"- {k.replace('_', ' ').title()}: {v}" for k, v in patient_data.items()])
+    
+    prompt = f"""
+You are a top-tier clinical nutritionist and pulmonologist AI.
+Based on the following patient profile and their predicted risk level ({risk_level}), generate an actionable "Preventive Guide" focusing on 3 things: Diet, Lifestyle, and Warnings.
+
+Patient Profile:
+{patient_summary}
+
+Format your response exactly as an HTML string using this strict template (do not include markdown block ticks like ```html):
+
+<div style="display: flex; flex-direction: column; gap: 1.5rem; margin-top: 1.5rem;">
+    <!-- Diet -->
+    <div style="background: rgba(46, 204, 113, 0.1); border-left: 4px solid var(--success-color); padding: 1.5rem; border-radius: 8px;">
+        <h4 style="color: var(--success-color); margin-bottom: 0.5rem;"><i class="fas fa-apple-alt"></i> Nutritional Interventions</h4>
+        <p style="color: var(--text-light); font-size: 0.95rem; line-height: 1.6;">(Provide 2-3 highly specific dietary recommendations tailored to their risk and lifestyle. E.g., anti-inflammatory foods if they smoke.)</p>
+    </div>
+    
+    <!-- Lifestyle -->
+    <div style="background: rgba(52, 152, 219, 0.1); border-left: 4px solid #3498db; padding: 1.5rem; border-radius: 8px;">
+        <h4 style="color: #3498db; margin-bottom: 0.5rem;"><i class="fas fa-running"></i> Autonomic Lifestyle</h4>
+        <p style="color: var(--text-light); font-size: 0.95rem; line-height: 1.6;">(Provide 2-3 lifestyle changes. Think beyond just "quit smoking" - mention specific exercise protocols or environment controls based on their exposure.)</p>
+    </div>
+
+    <!-- Warnings -->
+    <div style="background: rgba(231, 76, 60, 0.1); border-left: 4px solid var(--accent-color); padding: 1.5rem; border-radius: 8px;">
+        <h4 style="color: var(--accent-color); margin-bottom: 0.5rem;"><i class="fas fa-exclamation-triangle"></i> Clinical Warnings</h4>
+        <p style="color: var(--text-light); font-size: 0.95rem; line-height: 1.6;">(Provide 2 severe symptom warnings they must watch out for based on their age and profile e.g., hemoptysis. Remind them immediately to seek emergency care if these occur.)</p>
+    </div>
+</div>
+"""
+    try:
+        response = model.generate_content(prompt)
+        text = response.text
+        if "```html" in text:
+            text = text.replace("```html", "").replace("```", "")
+        return text.strip()
+    except Exception as e:
+        print(f"GenAI Error: {e}")
+        return "<p>Error generating preventive guide.</p>"

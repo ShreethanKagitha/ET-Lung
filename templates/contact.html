@@ -1,132 +1,108 @@
 {% extends "base.html" %}
 
-{% block title %}Contact - Lung Cancer Prediction System{% endblock %}
+{% block title %}Contact - LungCare AI Deployment{% endblock %}
 
 {% block content %}
 <!-- Page Header -->
-<section class="page-header">
+<section class="page-header" style="padding: 12rem 0 4rem; text-align: center;">
     <div class="container">
-        <h1><i class="fas fa-envelope"></i> Contact Us</h1>
-        <p>Get in touch with our team for support and inquiries</p>
+        <h1 style="font-size: 4rem; letter-spacing: -2px; margin-bottom: 1rem;"><i class="fas fa-satellite-dish" style="color: var(--primary-color); opacity: 0.8; margin-right: 15px;"></i>Global Integration</h1>
+        <p style="font-size: 1.25rem; opacity: 0.7; font-weight: 300;">Reach out to request API keys, clinical deployment, or institutional partnerships.</p>
     </div>
 </section>
 
 <!-- Contact Section -->
-<section class="contact-section">
+<section class="contact-section" style="padding: 5rem 0 10rem;">
     <div class="container">
-        <div class="contact-grid">
+        <div class="contact-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: flex-start;">
+            
+            <!-- Info Panel -->
             <div class="contact-info">
-                <h2>Get In Touch</h2>
-                <p>Have questions about our lung cancer prediction system? We're here to help!</p>
+                <h2 style="font-size: 2.5rem; letter-spacing: -1px; margin-bottom: 1.5rem; color: #fff;">System Uplinks</h2>
+                <p style="font-size: 1.1rem; color: var(--text-light); margin-bottom: 3rem; line-height: 1.8;">Connect with our core engineering team to integrate the Pulmonary Intelligence Engine into your healthcare infrastructure.</p>
                 
-                <div class="contact-details">
-                    <div class="contact-item">
-                        <div class="contact-icon">
-                            <i class="fas fa-map-marker-alt"></i>
+                <div class="contact-details" style="display: flex; flex-direction: column; gap: 2rem;">
+                    
+                    <div class="contact-item" style="display: flex; gap: 1.5rem; align-items: flex-start;">
+                        <div class="contact-icon" style="background: rgba(255,255,255,0.05); padding: 1.2rem; border-radius: 12px; font-size: 1.5rem; color: var(--primary-color); border: 1px solid var(--glass-border);">
+                            <i class="fas fa-server"></i>
                         </div>
                         <div>
-                            <h4>Address</h4>
-                            <p>123 Healthcare Street<br>Bengaluru, Karnataka 560001<br>India</p>
+                            <h4 style="color: #fff; margin-bottom: 0.5rem; font-size: 1.1rem;">Inference Nodes</h4>
+                            <p style="color: var(--text-light); font-size: 0.95rem; line-height: 1.6;">Node-01-BLR (Asia Pacific)<br>Node-02-US (North America)</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item" style="display: flex; gap: 1.5rem; align-items: flex-start;">
+                        <div class="contact-icon" style="background: rgba(255,255,255,0.05); padding: 1.2rem; border-radius: 12px; font-size: 1.5rem; color: var(--success-color); border: 1px solid var(--glass-border);">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div>
+                            <h4 style="color: #fff; margin-bottom: 0.5rem; font-size: 1.1rem;">Security Protocol</h4>
+                            <p style="color: var(--text-light); font-size: 0.95rem; line-height: 1.6;">security@lungcareai.com<br>Zero-Trust Operations</p>
                         </div>
                     </div>
                     
-                    <div class="contact-item">
-                        <div class="contact-icon">
-                            <i class="fas fa-phone"></i>
+                    <div class="contact-item" style="display: flex; gap: 1.5rem; align-items: flex-start;">
+                        <div class="contact-icon" style="background: rgba(255,255,255,0.05); padding: 1.2rem; border-radius: 12px; font-size: 1.5rem; color: var(--accent-color); border: 1px solid var(--glass-border);">
+                            <i class="fas fa-envelope-open-text"></i>
                         </div>
                         <div>
-                            <h4>Phone</h4>
-                            <p>+91 1234567890<br>+91 0987654321</p>
+                            <h4 style="color: #fff; margin-bottom: 0.5rem; font-size: 1.1rem;">Deployment & Sales</h4>
+                            <p style="color: var(--text-light); font-size: 0.95rem; line-height: 1.6;">deployment@lungcareai.com<br>api-keys@lungcareai.com</p>
                         </div>
-                    </div>
-                    
-                    <div class="contact-item">
-                        <div class="contact-icon">
-                            <i class="fas fa-envelope"></i>
-                        </div>
-                        <div>
-                            <h4>Email</h4>
-                            <p>info@lungcareai.com<br>support@lungcareai.com</p>
-                        </div>
-                    </div>
-                    
-                    <div class="contact-item">
-                        <div class="contact-icon">
-                            <i class="fas fa-clock"></i>
-                        </div>
-                        <div>
-                            <h4>Working Hours</h4>
-                            <p>Monday - Friday: 9:00 AM - 6:00 PM<br>Saturday: 10:00 AM - 4:00 PM</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="social-contact">
-                    <h4>Follow Us</h4>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-github"></i></a>
                     </div>
                 </div>
             </div>
             
-            <div class="contact-form-container">
-                <h2>Send Us a Message</h2>
-                <form id="contactForm" class="contact-form">
-                    <div class="form-group">
-                        <label for="name">
-                            <i class="fas fa-user"></i> Full Name
+            <!-- Form Panel -->
+            <div class="contact-form-container" style="background: rgba(255,255,255,0.02); backdrop-filter: blur(16px); padding: 3.5rem; border-radius: 20px; border: 1px solid var(--glass-border);">
+                <h2 style="font-size: 2.2rem; margin-bottom: 2.5rem; color: #fff;">Initialize Request</h2>
+                
+                <form id="contactForm" class="contact-form" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                    <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <label for="name" style="color: var(--text-light); font-size: 0.9rem; text-transform: uppercase;">
+                            <i class="fas fa-id-badge"></i> Authorized Name
                         </label>
-                        <input type="text" id="name" name="name" required placeholder="Enter your full name">
+                        <input type="text" id="name" name="name" required placeholder="Dr. Jane Doe" style="padding: 1rem; border-radius: 8px; background: rgba(0,0,0,0.5); border: 1px solid var(--glass-border); color: #fff; font-family: 'Outfit'; font-size: 1rem; outline: none;">
                     </div>
                     
-                    <div class="form-group">
-                        <label for="email">
-                            <i class="fas fa-envelope"></i> Email Address
+                    <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <label for="email" style="color: var(--text-light); font-size: 0.9rem; text-transform: uppercase;">
+                            <i class="fas fa-envelope"></i> Institutional Email
                         </label>
-                        <input type="email" id="email" name="email" required placeholder="Enter your email">
+                        <input type="email" id="email" name="email" required placeholder="jane.doe@hospital.edu" style="padding: 1rem; border-radius: 8px; background: rgba(0,0,0,0.5); border: 1px solid var(--glass-border); color: #fff; font-family: 'Outfit'; font-size: 1rem; outline: none;">
                     </div>
                     
-                    <div class="form-group">
-                        <label for="phone">
-                            <i class="fas fa-phone"></i> Phone Number
+                    <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <label for="subject" style="color: var(--text-light); font-size: 0.9rem; text-transform: uppercase;">
+                            <i class="fas fa-project-diagram"></i> Inquiry Node
                         </label>
-                        <input type="tel" id="phone" name="phone" placeholder="Enter your phone number">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="subject">
-                            <i class="fas fa-tag"></i> Subject
-                        </label>
-                        <select id="subject" name="subject" required>
-                            <option value="">Select Subject</option>
-                            <option value="general">General Inquiry</option>
-                            <option value="support">Technical Support</option>
-                            <option value="feedback">Feedback</option>
-                            <option value="partnership">Partnership</option>
-                            <option value="other">Other</option>
+                        <select id="subject" name="subject" required style="padding: 1rem; border-radius: 8px; background: rgba(0,0,0,0.5); border: 1px solid var(--glass-border); color: #fff; font-family: 'Outfit'; font-size: 1rem; outline: none; appearance: none;">
+                            <option value="" style="color: #000;">Select Protocol</option>
+                            <option value="api" style="color: #000;">API Access Keys</option>
+                            <option value="enterprise" style="color: #000;">Enterprise Deployment</option>
+                            <option value="research" style="color: #000;">Research Collaboration</option>
+                            <option value="other" style="color: #000;">Other Infrastructure</option>
                         </select>
                     </div>
                     
-                    <div class="form-group">
-                        <label for="message">
-                            <i class="fas fa-comment-alt"></i> Message
+                    <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <label for="message" style="color: var(--text-light); font-size: 0.9rem; text-transform: uppercase;">
+                            <i class="fas fa-terminal"></i> Encrypted Payload
                         </label>
-                        <textarea id="message" name="message" rows="6" required placeholder="Enter your message here..."></textarea>
+                        <textarea id="message" name="message" rows="5" required placeholder="Describe your deployment requirements..." style="padding: 1rem; border-radius: 8px; background: rgba(0,0,0,0.5); border: 1px solid var(--glass-border); color: #fff; font-family: 'Outfit'; font-size: 1rem; outline: none; resize: vertical;"></textarea>
                     </div>
                     
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-paper-plane"></i> Send Message
+                    <button type="submit" class="btn btn-primary" style="margin-top: 1rem; width: 100%; border-radius: 8px; padding: 1.2rem; font-size: 1.1rem; border: none; cursor: pointer;">
+                        <i class="fas fa-satellite-dish"></i> Transmit Payload
                     </button>
+                    
+                    <div id="formSuccess" class="form-message success" style="display: none; margin-top: 1.5rem; background: rgba(46, 204, 113, 0.1); border: 1px solid var(--success-color); padding: 1rem; border-radius: 8px; text-align: center;">
+                        <i class="fas fa-check-circle" style="color: var(--success-color); margin-bottom: 0.5rem; font-size: 1.5rem;"></i>
+                        <p style="color: #fff;">Signal received. A node representative will contact you shortly.</p>
+                    </div>
                 </form>
-                
-                <div id="formSuccess" class="form-message success" style="display: none;">
-                    <i class="fas fa-check-circle"></i>
-                    <p>Thank you! Your message has been sent successfully.</p>
-                </div>
             </div>
         </div>
     </div>
@@ -139,14 +115,15 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
     e.preventDefault();
     
     // Show success message
-    document.getElementById('formSuccess').style.display = 'block';
+    const successBox = document.getElementById('formSuccess');
+    successBox.style.display = 'block';
     
     // Reset form
     this.reset();
     
     // Hide success message after 5 seconds
     setTimeout(function() {
-        document.getElementById('formSuccess').style.display = 'none';
+        successBox.style.display = 'none';
     }, 5000);
 });
 </script>
